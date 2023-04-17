@@ -2,20 +2,20 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import SignupForm from "./components/SignupForm";
 import LoginForm from "./components/LoginForm";
 import { useSelector } from "react-redux";
+import Home from "./pages/Home";
 
 function App() {
   const { authData } = useSelector((state) => state.authReducer);
   const user = authData?.user;
 
   return (
-    <div className="scroll bg-slate-400 h-[110vh] w-full flex flex-col gap-5">
-      <div></div>
-      <div className="relative w-full md:w-11/12 bg-slate-100 h-screen md:h-[82%] border-2 mx-auto rounded-2xl">
+    <div className="scroll bg-slate-400 w-full flex flex-col gap-5">
+      <div className="relative w-full bg-slate-100 h-screen border-2 mx-auto">
         <BrowserRouter>
           <Routes>
             <Route
               path="/"
-              element={user ? <h1>helli</h1> : <Navigate to="/login" />}
+              element={user ? <Home /> : <Navigate to="/login" />}
             />
             <Route
               path="/login"
