@@ -8,7 +8,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const SignupForm = () => {
-  useSelector((state) => console.log(state.authReducer));
   const { loading } = useSelector(
     state => state.authReducer
   );
@@ -43,7 +42,7 @@ const SignupForm = () => {
           theme: "colored",
         });
 
-        dispatch(authFail(err.response?.data.error));
+        dispatch(authFail());
       }
     } else {
       toast.error("the passwords should match each other", {
@@ -64,7 +63,7 @@ const SignupForm = () => {
     <>
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
