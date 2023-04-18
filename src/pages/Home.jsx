@@ -77,6 +77,16 @@ const Home = () => {
       profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
     },
     {
+        firstName: "John",
+        lastName: "Doe",
+        profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
+      },
+      {
+        firstName: "John",
+        lastName: "Doe",
+        profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
+      },
+    {
       firstName: "Jane",
       lastName: "Doe",
       profilePic: "https://randomuser.me/api/portraits/women/2.jpg",
@@ -118,13 +128,13 @@ const Home = () => {
         style={chat && isMobile ? { display: "none" } : {}}
         className="h-screen bg-slate-400 w-full md:w-1/3 rounded-lg gap-2 flex flex-col"
       >
-        <div className="flex relative justify-between bg-slate-700 rounded">
+        <div className="flex relative flex-col items-center xl:flex-row justify-between bg-slate-700 rounded">
           <img src={iLineLogo} className="w-2/3 h-32" />
           <div className="search-box flex items-center mr-4">
             <input
               type="text"
               placeholder="Search"
-              className="p-2 rounded-lg focus:bg-slate-600 bg-slate-900 bg-transparent border-none outline-none text-white placeholder-white ml-2"
+              className="p-2 rounded-lg focus:bg-slate-600 w-full bg-slate-900 bg-transparent border-none outline-none text-white placeholder-white ml-1"
             />
             <FontAwesomeIcon icon={faSearch} className="text-white ml-2" />
           </div>
@@ -132,7 +142,7 @@ const Home = () => {
         <p className="ml-8 py-1 px-2 cursor-pointer bg-slate-500 w-fit rounded-lg mt-2">
           new group +
         </p>
-        <div className="bg-slate-400 mx-8 flex flex-col gap-4 p-2 rounded-lg">
+        <div className="bg-slate-400 mx-8 flex flex-col gap-4 p-2 overflow-y-scroll rounded-lg">
           {chatData.map((chat, index) => {
             return (
               <Chat key={index} chat={chat}/>
@@ -140,7 +150,7 @@ const Home = () => {
           })}
         </div>
       </div>
-      <ChatBox chat={chat} isMobile={isMobile}/>
+      <ChatBox chat={chat} setChat={setChat} isMobile={isMobile}/>
     </div>
   );
 };
