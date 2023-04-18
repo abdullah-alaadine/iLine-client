@@ -95,7 +95,31 @@ const Home = () => {
       firstName: "Bob",
       lastName: "Smith",
       profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
-    },
+    },{
+        firstName: "Bob",
+        lastName: "Smith",
+        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
+      },{
+        firstName: "Bob",
+        lastName: "Smith",
+        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
+      },{
+        firstName: "Bob",
+        lastName: "Smith",
+        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
+      },{
+        firstName: "Bob",
+        lastName: "Smith",
+        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
+      },{
+        firstName: "Bob",
+        lastName: "Smith",
+        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
+      },{
+        firstName: "Bob",
+        lastName: "Smith",
+        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
+      },
     {
       firstName: "Alice",
       lastName: "Jones",

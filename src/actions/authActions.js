@@ -1,16 +1,9 @@
-export const sendAuthReq = () => ({
-  type: "AUTH_START",
-});
-
-export const authSuccess = data => ({
+export const authSuccess = (user, token) => ({
   type: "AUTH_SUCCESS",
   payload: {
-    data,
+    user,
+    token
   },
-});
-
-export const authFail = () => ({
-  type: "AUTH_FAIL",
 });
 
 export const logout = () => ({

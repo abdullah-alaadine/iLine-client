@@ -5,8 +5,7 @@ import { useSelector } from "react-redux";
 import Home from "./pages/Home";
 
 function App() {
-  const { authData } = useSelector((state) => state.authReducer);
-  const user = authData?.user;
+  const { user } = useSelector((state) => state.authReducer);
 
   return (
     <div className="scroll bg-slate-400 w-full flex flex-col gap-5">

@@ -2,15 +2,13 @@ import { useState, useRef } from "react";
 import iLineLogo from "../assets/iLine_logo-removebg-preview.png";
 import { Link } from "react-router-dom";
 import { signUp } from "../api/authAPI";
-import { useDispatch, useSelector } from "react-redux";
-import { authFail, authSuccess, sendAuthReq } from "../actions/authActions";
+import { useDispatch } from "react-redux";
+import { authSuccess } from "../actions/authActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const SignupForm = () => {
-  const { loading } = useSelector(
-    state => state.authReducer
-  );
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,10 +24,11 @@ const SignupForm = () => {
       confirmPassRed.current &&
       confirmPassRed.current.value === formData.password
     ) {
-      dispatch(sendAuthReq());
+      setLoading(true)
       try {
         const { data } = await signUp(formData);
         dispatch(authSuccess(data));
+        setLoading(false)
       } catch (err) {
         toast.error(err.response?.data.error, {
           position: "top-center",
@@ -41,8 +40,7 @@ const SignupForm = () => {
           progress: undefined,
           theme: "colored",
         });
-
-        dispatch(authFail());
+        setLoading(false)
       }
     } else {
       toast.error("the passwords should match each other", {

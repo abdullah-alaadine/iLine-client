@@ -82,7 +82,7 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
   };
 
   const { profilePicture, firstName, lastName } = useSelector(
-    (state) => state.authReducer.authData.user
+    (state) => state.authReducer.user
   );
   return (
     <div
