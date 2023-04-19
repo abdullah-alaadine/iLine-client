@@ -10,7 +10,6 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 const ChatBox = ({ chat, isMobile, setChat }) => {
   const [showEmoji, setShowEmoji] = useState(false);
-
   const messages = [
     {
       message: "Hey, how's it going?",

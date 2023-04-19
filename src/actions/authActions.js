@@ -1,9 +1,6 @@
-export const authSuccess = (user, token) => ({
+export const authSuccess = payload => ({
   type: "AUTH_SUCCESS",
-  payload: {
-    user,
-    token
-  },
+  payload
 });
 
 export const logout = () => ({
