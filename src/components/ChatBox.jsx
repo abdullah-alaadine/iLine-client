@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import Profile from '../assets/profileImg.webp'
+import React, { useEffect, useRef, useState } from "react";
+import Profile from "../assets/profileImg.webp";
 
 // import profile from "../assets/logo-user-profile.png";
 import { useSelector } from "react-redux";
@@ -9,104 +9,37 @@ import Message from "./Message";
 import EmojiPicker from "emoji-picker-react";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { getMessages } from "../api/messagesAPI";
 
 const ChatBox = ({ chat, isMobile, setChat }) => {
   const [showEmoji, setShowEmoji] = useState(false);
-    
-  const messages = [
-    {
-      message: "Hey, how's it going?",
-      chatId: 1,
-      senderId: 1,
-      messageContent: "text",
-    },
-    {
-      message: "Not bad, thanks. How about you?",
-      chatId: 1,
-      senderId: 2,
-      messageContent: "text",
-    },
-    {
-      message: "I'm doing well, thanks for asking.",
-      chatId: 1,
-      senderId: 1,
-      messageContent: "text",
-    },
-    {
-      message: "What have you been up to?",
-      chatId: 1,
-      senderId: 2,
-      messageContent: "text",
-    },
-    {
-      message: "Just working on some projects. How about you?",
-      chatId: 1,
-      senderId: 1,
-      messageContent: "text",
-    },
-    {
-      message: "Same here, just trying to stay busy.",
-      chatId: 1,
-      senderId: 2,
-      messageContent: "text",
-    },
-    {
-      message: "Hey, did you see that new movie that just came out?",
-      chatId: 2,
-      senderId: 1,
-      messageContent: "text",
-    },
-    {
-      message: "Hey, did you see that new movie that just came out?",
-      chatId: 2,
-      senderId: 1,
-      messageContent: "text",
-    },{
-      message: "Hey, did you see that new movie that just came out?",
-      chatId: 2,
-      senderId: 1,
-      messageContent: "text",
-    },{
-      message: "Hey, did you see that new movie that just came out?",
-      chatId: 2,
-      senderId: 1,
-      messageContent: "text",
-    },
-    {
-      message: "No, I haven't. What's it about?",
-      chatId: 2,
-      senderId: 2,
-      messageContent: "text",
-    },
-    {
-      message:
-        "It's a sci-fi movie about time travel. I heard it's really good.",
-      chatId: 2,
-      senderId: 1,
-      messageContent: "text",
-    },
-    {
-      message: "Interesting, I might have to check it out.",
-      chatId: 2,
-      senderId: 2,
-      messageContent: "text",
-    },
-  ];
-  const messageRef = useRef(null)
+  const {token} = useSelector((state) => state.authReducer);
+  const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const { data } = await getMessages(chat._id, token);
+        setMessages(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMessages();
+  }, [chat]);
+
+  const messageRef = useRef(null);
   const handleEmojiClick = (emojiObj) => {
-    console.log(emojiObj.emoji);
-    setShowEmoji(false)
-    messageRef.current.value += emojiObj.emoji 
+    setShowEmoji(false);
+    messageRef.current.value += emojiObj.emoji;
   };
 
   const { profilePicture, firstName, lastName } = useSelector(
     (state) => state.authReducer.user
   );
 
-  
   return (
     <div
-        onClick={() => setShowEmoji(false)}
+      onClick={() => setShowEmoji(false)}
       style={
         chat && isMobile
           ? { display: "block" }
@@ -117,47 +50,55 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
       className="h-screen bg-slate-200 w-full md:w-2/3 rounded-lg "
     >
       <div className="w-full flex justify-between mx-2 items-center rounded-lg bg-slate-400 h-[10%]">
-          {isMobile && (
-            <button
-              onClick={() => setChat(null)}
-              className="m-2 bg-slate-400 rounded-full text-center"
-            >
-              {"<--"}
-            </button>
-          )}
-        
+        {isMobile && (
+          <button
+            onClick={() => setChat(null)}
+            className="m-2 bg-slate-400 rounded-full text-center"
+          >
+            {"<--"}
+          </button>
+        )}
+
         <div className="mr-3 items-center rounded-lg flex gap-4 md:gap-8 p-2 border-slate-500 cursor-pointer hover:bg-slate-500">
-          {chat && <img
-            src={profilePicture || Profile}
-            className="w-8 h-8 md:w-10 md:h-10 rounded-full"
-          />}
-          
+          {chat && (
+            <img
+              src={profilePicture || Profile}
+              className="w-8 h-8 md:w-10 md:h-10 rounded-full"
+            />
+          )}
+
           <h1>
-            {chat? chat.isGroup ? `${chat.name}`: `${chat.members[0].firstName + " " + chat.members[0].lastName}` : <span className=" text-lg md:text-3xl ml-2 font-[cursive]">
-          <FontAwesomeIcon icon={faBolt} /> iLine
-        </span> }
-            
+            {chat ? (
+              chat.isGroup ? (
+                `${chat.name}`
+              ) : (
+                `${chat.members[0].firstName + " " + chat.members[0].lastName}`
+              )
+            ) : (
+              <span className=" text-lg md:text-3xl ml-2 font-[cursive]">
+                <FontAwesomeIcon icon={faBolt} /> iLine
+              </span>
+            )}
           </h1>
         </div>
       </div>
       <div className=" border-solid overflow-y-scroll border-slate-500 bg-slate-400 flex flex-col justify-between rounded-xl border-2 m-2 h-5/6">
-      {showEmoji && (
-            <div onClick={e => e.stopPropagation()} className="absolute w-fit top-50">
-                <EmojiPicker
-                    onEmojiClick={handleEmojiClick}
-                />
-              </div>
-          )}
-        {messages.map((messageData, index) => {
-          return <Message messageData={messageData} key={index} />;
-        })}
+        {showEmoji && (
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="absolute w-fit top-50"
+          >
+            <EmojiPicker onEmojiClick={handleEmojiClick} />
+          </div>
+        )}
+        {messages.length ? messages.map( message => {
+          return <Message message={message} key={message._id} />;
+        }) : <p className=" relative text-slate-100 left-[35%] top-[35%] text-lg">your messages will go here</p>}
         <div className="w-full flex relative justify-between items-center px-3 py-1">
-          
           <FontAwesomeIcon
-            onClick={e => {
-                console.log('fontawesomeicon')
-                e.stopPropagation()
-                setShowEmoji(true)
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowEmoji(true);
             }}
             icon={faSmile}
             className="w-4 h-4 md:h-6 md:w-6 cursor-pointer"
@@ -179,6 +120,3 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
 };
 
 export default ChatBox;
-
-
-
