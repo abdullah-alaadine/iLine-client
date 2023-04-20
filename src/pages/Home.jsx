@@ -1,133 +1,30 @@
-// import React, { useEffect, useState } from "react";
-// import iLineLogo from "../assets/iLine_logo-removebg-preview.png";
-
-// const Home = () => {
-//   const [isMobile, setIsMobile] = useState(false);
-//   const [chat, setChat] = useState({});
-
-//   //choose the screen size
-//   const handleResize = () => {
-//     if (window.innerWidth < 768) {
-//       setIsMobile(true);
-//     } else {
-//       setIsMobile(false);
-//     }
-//   };
-//   console.log(isMobile);
-//   // create an event listener
-//   useEffect(() => {
-//     if (window.innerWidth < 768) {
-//       setIsMobile(true);
-//     } else {
-//       setIsMobile(false);
-//     }
-//     window.addEventListener("resize", handleResize);
-//   }, []);
-
-//   return (
-//     <div className="flex">
-//       <div
-//         style={chat && isMobile ? { display: "none" } : {}}
-//         className="h-screen bg-slate-500 w-full md:w-1/3 rounded-lg flex flex-col"
-//       >
-//         <div className="flex relative justify-between bg-slate-800 rounded">
-//         <img src={iLineLogo} className="w-2/3 h-32"/>
-//         </div>
-//       </div>
-//       <div
-//         style={
-//           chat && isMobile
-//             ? { display: "block" }
-//             : isMobile && !chat
-//             ? { display: "none" }
-//             : {}
-//         }
-//         className="h-screen bg-slate-300 w-full md:w-2/3 rounded-lg"
-//       >
-//         {isMobile && (
-//           <button
-//             onClick={() => setChat(null)}
-//             className="m-2 bg-slate-400 rounded-full text-center"
-//           >
-//             banana 2 {"<--"}
-//           </button>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Home;
-
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import iLineLogo from "../assets/iLine_logo-removebg-preview.png";
 import Chat from "../components/Chat";
 import ChatBox from "../components/ChatBox";
+import { getChats } from "../api/chatsAPI";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const [chat, setChat] = useState({});
+  const [chat, setChat] = useState(null);
+  const {token} = useSelector(state => state.authReducer);
+  const [chats, setChats] = useState(null)
 
-  const chatData = [
-    {
-      firstName: "John",
-      lastName: "Doe",
-      profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
-    },
-    {
-        firstName: "John",
-        lastName: "Doe",
-        profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
-      },
-      {
-        firstName: "John",
-        lastName: "Doe",
-        profilePic: "https://randomuser.me/api/portraits/men/1.jpg",
-      },
-    {
-      firstName: "Jane",
-      lastName: "Doe",
-      profilePic: "https://randomuser.me/api/portraits/women/2.jpg",
-    },
-    {
-      firstName: "Bob",
-      lastName: "Smith",
-      profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
-    },{
-        firstName: "Bob",
-        lastName: "Smith",
-        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
-      },{
-        firstName: "Bob",
-        lastName: "Smith",
-        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
-      },{
-        firstName: "Bob",
-        lastName: "Smith",
-        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
-      },{
-        firstName: "Bob",
-        lastName: "Smith",
-        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
-      },{
-        firstName: "Bob",
-        lastName: "Smith",
-        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
-      },{
-        firstName: "Bob",
-        lastName: "Smith",
-        profilePic: "https://randomuser.me/api/portraits/men/3.jpg",
-      },
-    {
-      firstName: "Alice",
-      lastName: "Jones",
-      profilePic: "https://randomuser.me/api/portraits/women/4.jpg",
-    },
-  ];
+  useEffect(() => {
+     const fetchChats = async () => {
+       try {
+         const {data} = await getChats(token); 
+         setChats(data);
+       } catch (error) {
+         console.log(error);
+       }
+     }
+     fetchChats()
+  }, [])
 
-  //choose the screen size
   const handleResize = () => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
@@ -135,8 +32,7 @@ const Home = () => {
       setIsMobile(false);
     }
   };
-  console.log(isMobile);
-  // create an event listener
+
   useEffect(() => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
@@ -167,9 +63,9 @@ const Home = () => {
           new group +
         </p>
         <div className="bg-slate-400 mx-8 flex flex-col gap-4 p-2 overflow-y-scroll rounded-lg">
-          {chatData.map((chat, index) => {
+          {chats?.map( elem => {
             return (
-              <Chat key={index} chat={chat}/>
+              <Chat setChat={setChat} key={elem._id} chat={elem}/>
             );
           })}
         </div>

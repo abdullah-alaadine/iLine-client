@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
-import profile from "../assets/logo-user-profile.png";
+import Profile from '../assets/profileImg.webp'
+
+// import profile from "../assets/logo-user-profile.png";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBolt } from "@fortawesome/free-solid-svg-icons";
@@ -10,6 +12,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 const ChatBox = ({ chat, isMobile, setChat }) => {
   const [showEmoji, setShowEmoji] = useState(false);
+    
   const messages = [
     {
       message: "Hey, how's it going?",
@@ -54,6 +57,22 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
       messageContent: "text",
     },
     {
+      message: "Hey, did you see that new movie that just came out?",
+      chatId: 2,
+      senderId: 1,
+      messageContent: "text",
+    },{
+      message: "Hey, did you see that new movie that just came out?",
+      chatId: 2,
+      senderId: 1,
+      messageContent: "text",
+    },{
+      message: "Hey, did you see that new movie that just came out?",
+      chatId: 2,
+      senderId: 1,
+      messageContent: "text",
+    },
+    {
       message: "No, I haven't. What's it about?",
       chatId: 2,
       senderId: 2,
@@ -83,6 +102,8 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
   const { profilePicture, firstName, lastName } = useSelector(
     (state) => state.authReducer.user
   );
+
+  
   return (
     <div
         onClick={() => setShowEmoji(false)}
@@ -96,7 +117,6 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
       className="h-screen bg-slate-200 w-full md:w-2/3 rounded-lg "
     >
       <div className="w-full flex justify-between mx-2 items-center rounded-lg bg-slate-400 h-[10%]">
-        <div>
           {isMobile && (
             <button
               onClick={() => setChat(null)}
@@ -105,21 +125,22 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
               {"<--"}
             </button>
           )}
-        </div>
-        <span className=" text-lg md:text-3xl ml-2 font-[cursive]">
-          <FontAwesomeIcon icon={faBolt} /> iLine
-        </span>
-        <div className="mr-3 items-center flex gap-4 md:gap-8 p-2 border-slate-500 rounded-lg cursor-pointer hover:bg-slate-500">
-          <img
-            src={profilePicture || profile}
-            className="w-6 h-6 m:w-8 m:h-8"
-          />
+        
+        <div className="mr-3 items-center rounded-lg flex gap-4 md:gap-8 p-2 border-slate-500 cursor-pointer hover:bg-slate-500">
+          {chat && <img
+            src={profilePicture || Profile}
+            className="w-8 h-8 md:w-10 md:h-10 rounded-full"
+          />}
+          
           <h1>
-            {firstName} {lastName}
+            {chat? chat.isGroup ? `${chat.name}`: `${chat.members[0].firstName + " " + chat.members[0].lastName}` : <span className=" text-lg md:text-3xl ml-2 font-[cursive]">
+          <FontAwesomeIcon icon={faBolt} /> iLine
+        </span> }
+            
           </h1>
         </div>
       </div>
-      <div className=" border-solid border-slate-500 bg-slate-400 flex flex-col justify-between rounded-xl border-2 m-2 h-5/6">
+      <div className=" border-solid overflow-y-scroll border-slate-500 bg-slate-400 flex flex-col justify-between rounded-xl border-2 m-2 h-5/6">
       {showEmoji && (
             <div onClick={e => e.stopPropagation()} className="absolute w-fit top-50">
                 <EmojiPicker
@@ -158,3 +179,6 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
 };
 
 export default ChatBox;
+
+
+
