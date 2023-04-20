@@ -82,7 +82,7 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
           </h1>
         </div>
       </div>
-      <div className=" border-solid overflow-y-scroll border-slate-500 bg-slate-400 flex flex-col justify-between rounded-xl border-2 m-2 h-5/6">
+      <div className=" border-solid py-1 overflow-y-scroll border-slate-500 bg-slate-400 flex flex-col justify-between rounded-xl border-2 m-2 h-5/6">
         {showEmoji && (
           <div
             onClick={(e) => e.stopPropagation()}
