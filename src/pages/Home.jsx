@@ -48,7 +48,7 @@ const Home = () => {
         style={chat && isMobile ? { display: "none" } : {}}
         className="h-screen bg-slate-400 w-full md:w-1/3 rounded-lg gap-2 flex flex-col"
       >
-        <div className="flex relative flex-col items-center xl:flex-row justify-between bg-slate-700 rounded">
+        <div className="flex relative flex-col items-center xl:flex-row justify-between bg-slate-800 rounded">
           <img src={iLineLogo} className="w-2/3 h-32" />
           <div className="search-box flex items-center mr-4">
             <input

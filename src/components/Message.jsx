@@ -8,14 +8,14 @@ const Message = ({ message }) => {
     <div className="flex flex-col overflow-y-auto mx-3 ">
       <div
         className={
-          " text-slate-200 p-1 rounded-lg flex flex-col gap-2 max-w-[70%] text-xs md:text-sm lg:text-base " +
+          "p-1 rounded-lg flex flex-col gap-2 max-w-[70%] text-xs md:text-sm lg:text-base " +
           (message.senderId !== _id
-            ? "self-end bg-slate-700"
-            : "self-start bg-slate-400")
+            ? "self-end text-slate-200 bg-slate-800"
+            : "self-start text-slate-800 bg-slate-300")
         }
       >
         <p>{message.messageText}</p>
-        <p className="text-[8px] md:text-xs text-gray-400">{format(message.createdAt)}</p>
+        <p className="text-[8px] md:text-xs text-gray-500">{format(message.createdAt)}</p>
       </div>
     </div>
   );
