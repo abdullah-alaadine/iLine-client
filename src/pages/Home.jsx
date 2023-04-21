@@ -83,7 +83,7 @@ const Home = () => {
         )}
         {search ? (
           <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
-            {searchResults?.users.map(searchResult => <SearchResult setSearch={setSearch} key={searchResult._id} searchResult={searchResult}/>)}
+            {searchResults?.users.map(searchResult => <SearchResult setSearch={setSearch} key={searchResult._id} searchResult={searchResult} setChats={setChats} chats={chats}/>)}
           </div>
         ) : (
           <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
