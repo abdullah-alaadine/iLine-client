@@ -62,7 +62,7 @@ const Home = () => {
         <p className="ml-8 py-1 px-2 cursor-pointer bg-slate-500 w-fit rounded-lg mt-2">
           new group +
         </p>
-        <div className="bg-slate-400 mx-8 flex flex-col gap-4 p-2 overflow-y-scroll rounded-lg">
+        <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
           {chats?.map( elem => {
             return (
               <Chat setChat={setChat} key={elem._id} chat={elem}/>
