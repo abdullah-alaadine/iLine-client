@@ -1,6 +1,15 @@
-import axios from 'axios'
+import axios from "axios";
 
-const authAPI = axios.create({ baseURL: 'http://localhost:4000/user' });
+const authAPI = axios.create({ baseURL: "http://localhost:4000/user" });
 
-export const logIn= formData => authAPI.post('/login',formData);
-export const signUp = formData => authAPI.post('/signup', formData);
+export const logIn = (formData) => authAPI.post("/login", formData);
+export const signUp = (formData) => authAPI.post("/signup", formData);
+export const searchUsers = (data, token) =>
+  authAPI.get("/search", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      ...data,
+    },
+  });
