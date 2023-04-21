@@ -1,9 +1,17 @@
-import axios from 'axios'
+import axios from "axios";
 
-const authAPI = axios.create({ baseURL: 'http://localhost:4000/chat' });
+const chatAPI = axios.create({ baseURL: "http://localhost:4000/chat" });
 
-export const getChats = token => authAPI.get('', {
+export const getChats = (token) =>
+  chatAPI.get("", {
     headers: {
-        Authorization: `Bearer ${token}`
-    }
-});
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+export const createChat = (data, token) =>
+  chatAPI.post("/", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
