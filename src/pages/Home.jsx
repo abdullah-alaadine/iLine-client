@@ -8,6 +8,7 @@ import { getChats } from "../api/chatsAPI";
 import { useSelector } from "react-redux";
 import { searchUsers } from "../api/authAPI";
 import SearchResult from "../components/SearchResult";
+import { groupChatExists } from "../utils/checkChatExistence";
 
 const Home = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -44,9 +45,12 @@ const Home = () => {
     window.addEventListener("resize", handleResize);
   }, []);
   const [searchResults, setSearchResults] = useState(null);
+  const [groupSearchResults, setGroupSearchResults] = useState([]);
+
   const handleSearchChange = async (e) => {
     if (e.target.value) {
       setSearch(true);
+      setGroupSearchResults(groupChatExists(chats, e.target.value));
       try {
         const { data } = await searchUsers({ name: e.target.value }, token);
         setSearchResults(data);
@@ -83,7 +87,27 @@ const Home = () => {
         )}
         {search ? (
           <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
-            {searchResults?.users.map(searchResult => <SearchResult setSearch={setSearch} key={searchResult._id} searchResult={searchResult} setChats={setChats} chats={chats}/>)}
+            {search && groupSearchResults[0] && <p>Group Chats</p>}
+            {groupSearchResults.length ?
+              groupSearchResults.map((groupSearchResult) => (
+                <SearchResult
+                  key={groupSearchResult._id}
+                  groupChat={true}
+                  groupSearchResult={groupSearchResult}
+                  setChat={setChat}
+                  setSearch={setSearch}
+                />
+              )) : null}
+            {searchResults?.length ? "Users": null}
+            {searchResults?.users.map((searchResult) => (
+              <SearchResult
+                setSearch={setSearch}
+                key={searchResult._id}
+                searchResult={searchResult}
+                setChats={setChats}
+                chats={chats}
+              />
+            ))}
           </div>
         ) : (
           <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
