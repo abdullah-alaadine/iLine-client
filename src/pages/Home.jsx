@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import iLineLogo from "../assets/iLine_logo-removebg-preview.png";
@@ -9,13 +9,16 @@ import { useSelector } from "react-redux";
 import { searchUsers } from "../api/authAPI";
 import SearchResult from "../components/SearchResult";
 import { groupChatExists } from "../utils/checkChatExistence";
+import Pagination from "../components/Pagination";
 
 const Home = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
   const [chat, setChat] = useState(null);
   const { token } = useSelector((state) => state.authReducer);
   const [chats, setChats] = useState(null);
   const [search, setSearch] = useState(false);
+  const searchRef = useRef(null);
   useEffect(() => {
     const fetchChats = async () => {
       try {
@@ -47,18 +50,33 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState(null);
   const [groupSearchResults, setGroupSearchResults] = useState([]);
 
-  const handleSearchChange = async (e) => {
-    if (e.target.value) {
+  const handleSearchChange = async () => {
+    if (searchRef.current.value) {
       setSearch(true);
-      setGroupSearchResults(groupChatExists(chats, e.target.value));
+      setGroupSearchResults(groupChatExists(chats, searchRef.current.value));
       try {
-        const { data } = await searchUsers({ name: e.target.value }, token);
+        const { data } = await searchUsers(
+          { name: searchRef.current.value },
+          token
+        );
         setSearchResults(data);
       } catch (error) {
         console.log(error);
       }
     } else {
       setSearch(false);
+    }
+  };
+  const onPageChange = async (idx) => {
+    setCurrentPage(idx);
+    try {
+      const { data } = await searchUsers(
+        { name: searchRef.current.value, page: idx },
+        token
+      );
+      setSearchResults(data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -74,6 +92,7 @@ const Home = () => {
             <input
               type="text"
               placeholder="Search"
+              ref={searchRef}
               onChange={handleSearchChange}
               className="p-2 rounded-lg placeholder:text-sm  focus:bg-slate-500 w-full bg-slate-700 bg-transparent border-none outline-none text-white placeholder-white ml-1"
             />
@@ -96,6 +115,7 @@ const Home = () => {
                     groupSearchResult={groupSearchResult}
                     setChat={setChat}
                     setSearch={setSearch}
+                    searchRef={searchRef}
                   />
                 ))
               : null}
@@ -108,8 +128,18 @@ const Home = () => {
                 setChats={setChats}
                 chats={chats}
                 setChat={setChat}
+                searchRef={searchRef}
               />
             ))}
+            {searchResults?.totalPages > 1 ? (
+              <Pagination
+                onPageChange={onPageChange}
+                totalPages={searchResults?.totalPages}
+                currentPage={currentPage}
+              />
+            ) : (
+              ""
+            )}
           </div>
         ) : (
           <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">

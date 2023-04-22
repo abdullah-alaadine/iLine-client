@@ -14,6 +14,7 @@ const SearchResult = ({
   chats,
   groupChat,
   setChat,
+  searchRef,
   groupSearchResult,
 }) => {
   const { token } = useSelector((state) => state.authReducer);
@@ -21,11 +22,13 @@ const SearchResult = ({
   const hanldlePrevChat = () => {
     setSearch(false);
     setChat(groupSearchResult);
+    searchRef.current.value = "";
   };
 
   const handleNewChat = async () => {
     setSearch(false);
     const user = userExists(chats, searchResult);
+    searchRef.current.value = "";
     if (user) {
       const userChat = getUserChat(chats, user);
       setChat(userChat);
