@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { format } from "timeago.js";
 import GroupIcon from "../assets/groupIcon.jpg";
+import { userExists, getUserChat } from "../utils/checkUserExistence";
 
 const SearchResult = ({
   searchResult,
@@ -13,25 +14,35 @@ const SearchResult = ({
   chats,
   groupChat,
   setChat,
-  groupSearchResult
+  groupSearchResult,
 }) => {
   const { token } = useSelector((state) => state.authReducer);
 
   const hanldlePrevChat = () => {
-    setSearch(false)
-    setChat(groupSearchResult)
+    setSearch(false);
+    setChat(groupSearchResult);
   };
+
   const handleNewChat = async () => {
     setSearch(false);
-    try {
-      const { data } = await createChat({ members: [searchResult._id] }, token);
-      setChats(
-        [...chats, data].sort(
-          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
-        )
-      );
-    } catch (error) {
-      console.log(error);
+    const user = userExists(chats, searchResult);
+    if (user) {
+      const userChat = getUserChat(chats, user);
+      setChat(userChat);
+    } else {
+      try {
+        const { data } = await createChat(
+          { members: [searchResult._id] },
+          token
+        );
+        setChats(
+          [...chats, data].sort(
+            (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+          )
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   if (groupChat) {
@@ -45,10 +56,15 @@ const SearchResult = ({
           src={groupSearchResult.profilePic ?? GroupIcon}
           alt=""
         />
-        <p className="text-base text-center w-full self-center">{groupSearchResult.name}</p>
+        <p className="text-base text-center w-full self-center">
+          {groupSearchResult.name}
+        </p>
         <div>
           <p className="text-[8px] w-8 md:text-[10px] text-slate-700">
-            {format(groupSearchResult.updatedAt).slice(0, format(groupSearchResult.updatedAt).length - 4)}
+            {format(groupSearchResult.updatedAt).slice(
+              0,
+              format(groupSearchResult.updatedAt).length - 4
+            )}
           </p>
         </div>
       </div>

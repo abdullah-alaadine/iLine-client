@@ -88,17 +88,18 @@ const Home = () => {
         {search ? (
           <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
             {search && groupSearchResults[0] && <p>Group Chats</p>}
-            {groupSearchResults.length ?
-              groupSearchResults.map((groupSearchResult) => (
-                <SearchResult
-                  key={groupSearchResult._id}
-                  groupChat={true}
-                  groupSearchResult={groupSearchResult}
-                  setChat={setChat}
-                  setSearch={setSearch}
-                />
-              )) : null}
-            {searchResults?.length ? "Users": null}
+            {groupSearchResults.length
+              ? groupSearchResults.map((groupSearchResult) => (
+                  <SearchResult
+                    key={groupSearchResult._id}
+                    groupChat={true}
+                    groupSearchResult={groupSearchResult}
+                    setChat={setChat}
+                    setSearch={setSearch}
+                  />
+                ))
+              : null}
+            {searchResults?.length ? "Users" : null}
             {searchResults?.users.map((searchResult) => (
               <SearchResult
                 setSearch={setSearch}
@@ -106,6 +107,7 @@ const Home = () => {
                 searchResult={searchResult}
                 setChats={setChats}
                 chats={chats}
+                setChat={setChat}
               />
             ))}
           </div>
