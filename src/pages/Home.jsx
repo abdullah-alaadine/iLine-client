@@ -10,8 +10,10 @@ import { searchUsers } from "../api/authAPI";
 import SearchResult from "../components/SearchResult";
 import { groupChatExists } from "../utils/checkChatExistence";
 import Pagination from "../components/Pagination";
+import GroupList from "../components/GroupList";
 
 const Home = () => {
+  const [newGroup, setNewGroup] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
   const [chat, setChat] = useState(null);
@@ -99,8 +101,11 @@ const Home = () => {
             <FontAwesomeIcon icon={faSearch} className="text-white ml-2" />
           </div>
         </div>
-        {!search && (
-          <p className="ml-8 py-1 px-2 cursor-pointer bg-slate-500 w-fit rounded-lg mt-2">
+        {!search && !newGroup && (
+          <p
+            className="ml-8 py-1 px-2 cursor-pointer bg-slate-500 w-fit rounded-lg mt-2"
+            onClick={() => setNewGroup(true)}
+          >
             new group +
           </p>
         )}
@@ -141,6 +146,8 @@ const Home = () => {
               ""
             )}
           </div>
+        ) : newGroup ? (
+          <GroupList />
         ) : (
           <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
             {chats?.map((elem) => {
