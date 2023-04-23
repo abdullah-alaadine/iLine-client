@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { createChat, updateChat } from "../api/chatsAPI";
 import { useSelector } from "react-redux";
+import { searchUsers } from "../api/authAPI";
 
 const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
   const { token } = useSelector((state) => state.authReducer);
+  const [searchResults, setSearchResults] = useState([]);
   const nameRef = useRef(null);
   const [group, setGroup] = useState(chat?.members ?? []);
 
@@ -17,7 +19,7 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
           (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
         )
       );
-      setNewGroup(false)
+      setNewGroup(false);
     } catch (error) {
       console.log(error);
     }
@@ -25,13 +27,28 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
 
   const handleEditGroupChat = async () => {
     try {
-      const { data } = await updateChat(chat._id, {
-        name: nameRef.current.value,
-        members: group,
-      }, token);
-      setChats(chats.map(obj => data._id === obj._id ? {...data} : obj))
+      const { data } = await updateChat(
+        chat._id,
+        {
+          name: nameRef.current.value,
+          members: group,
+        },
+        token
+      );
+      setChats(chats.map((obj) => (data._id === obj._id ? { ...data } : obj)));
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSearchChange = async (e) => {
+    if (e.target.value) {
+      try {
+        const { data } = await searchUsers({ name: e.target.value }, token);
+        setSearchResults(data);
+      } catch (error) {
         console.log(error)
+      }
     }
   };
 
@@ -45,7 +62,10 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
       />
       <div className="flex flex-wrap">
         {group.map((member) => (
-          <div key={member.id} className="flex gap-8 p-2 items-center border-b border-r border-slate-500 rounded-lg hover:bg-slate-500">
+          <div
+            key={member.id}
+            className="flex gap-8 p-2 items-center border-b border-r border-slate-500 rounded-lg hover:bg-slate-500"
+          >
             <p className="text-center text-xs md:text-sm w-full self-center">
               {member.firstName} {member.lastName}
             </p>
@@ -61,7 +81,11 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
         type="text"
         placeholder="Add User"
         className="bg-slate-100 rounded-lg py-1 px-3 focus:outline-none focus:bg-slate-600 focus:text-slate-100"
+        onChange={handleSearchChange}
       />
+      {searchResults.map(searchResult => (
+        <GroupMemberSearchResult key={searchResult._id}/>
+      ))}
       <button
         onClick={
           chat?.members.length ? handleEditGroupChat : handleCreateGroupChat

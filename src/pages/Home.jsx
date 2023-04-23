@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import iLineLogo from "../assets/iLine_logo-removebg-preview.png";
 import Chat from "../components/Chat";
 import ChatBox from "../components/ChatBox";
@@ -147,7 +147,10 @@ const Home = () => {
             )}
           </div>
         ) : newGroup ? (
-          <GroupList />
+          <div className="relative">
+          <button className="absolute mr-3 cursor-pointer right-0" onClick={() => setNewGroup(false)}><FontAwesomeIcon icon={faTimes}/></button>
+          <GroupList chats={chats} setChats={setChats} setNewGroup={setNewGroup} />
+          </div>
         ) : (
           <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
             {chats?.map((elem) => {

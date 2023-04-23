@@ -3,7 +3,7 @@ import { createChat } from "../api/chatsAPI";
 import Profile from "../assets/profileImg.webp";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { format } from "timeago.js";
+import { format } from "timeago.se";
 import GroupIcon from "../assets/groupIcon.jpg";
 import { userExists, getUserChat } from "../utils/checkUserExistence";
 
