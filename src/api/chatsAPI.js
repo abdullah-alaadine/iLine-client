@@ -15,3 +15,10 @@ export const createChat = (data, token) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+export const updateChat = (chatId, data, token) =>
+  chatAPI.put(`/${chatId}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }); // data : {members: [id], name: String}
