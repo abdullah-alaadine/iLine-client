@@ -9,18 +9,18 @@ import GroupMemberSearchResult from "./GroupMemberSearchResult";
 import Pagination from "./Pagination";
 import { memberExists } from "../utils/checkUserExistence";
 
-const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
+const GroupList = ({ chat, chats, setChats, setNewGroup, setGroupCard }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { token } = useSelector((state) => state.authReducer);
   const [searchResults, setSearchResults] = useState([]);
-  const nameRef = useRef(null);
+  const [name, setName] = useState(chat?.name ?? "")
   const [group, setGroup] = useState(chat?.members ?? []);
   const searchRef = useRef(null);
   const handleCreateGroupChat = async () => {
     try {
       const members = group.map((user) => user._id);
       const { data } = await createChat(
-        { members, name: nameRef.current.value, isGroup: true },
+        { members, name: name, isGroup: true },
         token
       );
       setChats(
@@ -58,12 +58,24 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
       const { data } = await updateChat(
         chat._id,
         {
-          name: nameRef.current.value,
+          name: name,
           members,
         },
         token
       );
       setChats(chats.map((obj) => (data._id === obj._id ? { ...data } : obj)));
+      setGroupCard(false)
+      toast('Group updated successfully!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+        
     } catch (error) {
       if (error.response) {
         toast.error(error.response.data.error, {
@@ -114,7 +126,8 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
   return (
     <div className="flex flex-col gap-2 items-center overflow-y-scroll">
       <input
-        ref={nameRef}
+        value={name}
+        onChange={e => setName(e.target.value)}
         type="text"
         placeholder="Group Name"
         className="bg-slate-100 rounded-lg py-1 px-3 focus:outline-none focus:bg-slate-600 focus:text-slate-100"
@@ -155,7 +168,7 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
         className="bg-slate-100 rounded-lg py-1 px-3 focus:outline-none focus:bg-slate-600 focus:text-slate-100"
         onChange={handleSearchChange}
       />
-      <div className="overflow-y-scroll">
+      <div className="overflow-y-scroll flex flex-col gap-2">
         {search &&
           searchResults?.users?.map((searchResult) => (
             <GroupMemberSearchResult
@@ -181,7 +194,7 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
         }
         className=" bg-slate-700 w-fit py-1 px-2 rounded-lg text-slate-100 hover:bg-slate-100 hover:text-slate-700"
       >
-        Create Group
+        {chat ? "Update Group" : "Create Group"}
       </button>
     </div>
   );
