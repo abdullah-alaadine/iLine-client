@@ -8,12 +8,13 @@ import EmojiPicker from "emoji-picker-react";
 import { faSmile } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { getMessages, postMessage } from "../api/messagesAPI";
+import GroupMembersCard from "./GroupMembersCard";
 
 const ChatBox = ({ chat, isMobile, setChat }) => {
   const [showEmoji, setShowEmoji] = useState(false);
   const { token } = useSelector((state) => state.authReducer);
   const [messages, setMessages] = useState([]);
-
+  const [groupCard, setGroupCard] = useState(false);
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -31,7 +32,6 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
     setShowEmoji(false);
     messageRef.current.value += emojiObj.emoji;
   };
-
   const { profilePicture, firstName, lastName } = useSelector(
     (state) => state.authReducer.user
   );
@@ -49,10 +49,12 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
     }
     messageRef.current.value = "";
   };
-
   return (
     <div
-      onClick={() => setShowEmoji(false)}
+      onClick={() => {
+        setShowEmoji(false);
+        setGroupCard(false);
+      }}
       style={
         chat && isMobile
           ? { display: "block" }
@@ -72,7 +74,13 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
           </button>
         )}
 
-        <div className="mr-3 items-center rounded-lg flex gap-4 md:gap-8 p-2 border-slate-500 cursor-pointer hover:bg-slate-500">
+        <div
+          className="mr-3 items-center rounded-lg flex gap-4 md:gap-8 p-2 border-slate-500 cursor-pointer hover:bg-slate-500"
+          onClick={e => {
+            e.stopPropagation()
+            setGroupCard(true)
+          }}
+        >
           {chat && (
             <img
               src={profilePicture || Profile}
@@ -95,7 +103,8 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
           </h1>
         </div>
       </div>
-      <div className=" border-solid py-1 overflow-y-scroll border-slate-500 bg-slate-400 grid grid-rows-1 rounded-xl border-2 m-2 h-5/6">
+      <div className="relative border-solid py-1 overflow-y-scroll border-slate-500 bg-slate-400 grid grid-rows-1 rounded-xl border-2 m-2 h-5/6">
+        {groupCard && chat?.isGroup && <GroupMembersCard chat={chat}/>}
         {showEmoji && (
           <div
             onClick={(e) => e.stopPropagation()}
@@ -105,15 +114,15 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
           </div>
         )}
         <div className=" overflow-x-hidden">
-        {messages.length ? (
-          messages.map((message) => {
-            return <Message message={message} key={message._id} />;
-          })
-        ) : (
-          <p className=" relative text-slate-100 left-[35%] top-[35%] text-lg">
-            your messages will go here
-          </p>
-        )}
+          {messages.length ? (
+            messages.map((message) => {
+              return <Message message={message} key={message._id} />;
+            })
+          ) : (
+            <p className=" relative text-slate-100 left-[35%] top-[35%] text-lg">
+              your messages will go here
+            </p>
+          )}
         </div>
         <div className="w-full bottom-0 flex justify-between items-center px-3 py-1">
           <FontAwesomeIcon
