@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import GroupIcon from "../assets/groupIcon.jpg";
 import GroupList from "./GroupList";
+import GroupDetails from "./GroupDetails";
 
 const GroupMembersCard = ({ chat, chats, setChats, setGroupCard }) => {
   const { _id } = useSelector((state) => state.authReducer.user);
@@ -19,7 +20,7 @@ const GroupMembersCard = ({ chat, chats, setChats, setGroupCard }) => {
           setGroupCard={setGroupCard}
         />
       ) : (
-        ""
+        <GroupDetails chat={chat}/>
       )}
     </div>
   );

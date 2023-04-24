@@ -105,7 +105,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
       </div>
       <div className="relative border-solid py-1 overflow-y-hidden border-slate-500 bg-slate-400 grid grid-rows-1 rounded-xl border-2 m-2 h-5/6">
         {groupCard && chat?.isGroup && <div
-            className="absolute inset-0 z-10 overflow-y-auto"
+            className="absolute inset-0 z-10 overflow-y-auto w-full md:w-[60%] rounded-lg"
             style={{ height: "90%" }}
           >
             <GroupMembersCard chat={chat} chats={chats} setChats={setChats} setGroupCard={setGroupCard} />
