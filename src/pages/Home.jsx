@@ -159,7 +159,7 @@ const Home = () => {
           </div>
         )}
       </div>
-      <ChatBox chat={chat} setChat={setChat} isMobile={isMobile} />
+      <ChatBox chat={chat} setChat={setChat} isMobile={isMobile} setChats={setChats} chats={chats}/>
     </div>
   );
 };

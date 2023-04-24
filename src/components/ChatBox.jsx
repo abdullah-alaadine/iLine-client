@@ -10,7 +10,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { getMessages, postMessage } from "../api/messagesAPI";
 import GroupMembersCard from "./GroupMembersCard";
 
-const ChatBox = ({ chat, isMobile, setChat }) => {
+const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
   const [showEmoji, setShowEmoji] = useState(false);
   const { token } = useSelector((state) => state.authReducer);
   const [messages, setMessages] = useState([]);
@@ -62,7 +62,7 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
           ? { display: "none" }
           : {}
       }
-      className="h-screen relative` bg-slate-200 w-full md:w-2/3 rounded-lg "
+      className="h-screen relative` bg-slate-200 w-full md:w-2/3 rounded-lg overflow-y-scroll "
     >
       <div className=" border-slate-500 border-2 flex justify-between mx-2 items-center rounded-lg bg-slate-400 h-[10%]">
         {isMobile && (
@@ -103,8 +103,13 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
           </h1>
         </div>
       </div>
-      <div className="relative border-solid py-1 overflow-y-scroll border-slate-500 bg-slate-400 grid grid-rows-1 rounded-xl border-2 m-2 h-5/6">
-        {groupCard && chat?.isGroup && <GroupMembersCard chat={chat}/>}
+      <div className="relative border-solid py-1 overflow-y-hidden border-slate-500 bg-slate-400 grid grid-rows-1 rounded-xl border-2 m-2 h-5/6">
+        {groupCard && chat?.isGroup && <div
+            className="absolute inset-0 z-10 overflow-y-auto"
+            style={{ height: "90%" }}
+          >
+            <GroupMembersCard chat={chat} chats={chats} setChats={setChats} setGroupCard={setGroupCard} />
+          </div>}
         {showEmoji && (
           <div
             onClick={(e) => e.stopPropagation()}

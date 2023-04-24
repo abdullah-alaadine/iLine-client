@@ -8,7 +8,7 @@ const GroupMemberSearchResult = ({ searchResult, onClickHandler, group }) => {
     <div
       onClick={user ? null : () => onClickHandler(searchResult)}
       className={
-        "flex gap-8 p-2 items-center border-b border-slate-500 overflow-y-scroll rounded-lg w-52 md:w-40 lg:w-64" +
+        "flex gap-8 p-2 items-center border-b border-slate-500 overflow-y-scroll rounded-lg " +
         (user ? " bg-gray-300" : " hover:bg-slate-500 hover:cursor-pointer")
       }
     >
