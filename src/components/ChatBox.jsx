@@ -80,7 +80,7 @@ const ChatBox = ({ chat, isMobile, setChat }) => {
             />
           )}
 
-          <h1>
+          <h1 className="text-xs sm:text-sm lg:text-base">
             {chat ? (
               chat.isGroup ? (
                 `${chat.name}`
