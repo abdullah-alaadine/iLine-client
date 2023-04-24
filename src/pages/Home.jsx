@@ -103,7 +103,7 @@ const Home = () => {
         </div>
         {!search && !newGroup && (
           <p
-            className="ml-8 py-1 px-2 cursor-pointer bg-slate-500 w-fit rounded-lg mt-2"
+            className="ml-8 py-1 px-2 text-xs md:text-sm text-center cursor-pointer bg-slate-500 w-fit rounded-lg mt-2"
             onClick={() => setNewGroup(true)}
           >
             new group +
@@ -152,7 +152,7 @@ const Home = () => {
           <GroupList chats={chats} setChats={setChats} setNewGroup={setNewGroup} />
           </div>
         ) : (
-          <div className="bg-slate-400 mx-8 flex flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
+          <div className="bg-slate-400 flex w-full flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
             {chats?.map((elem) => {
               return <Chat setChat={setChat} key={elem._id} chat={elem} />;
             })}
