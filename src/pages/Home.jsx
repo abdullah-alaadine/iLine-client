@@ -147,7 +147,7 @@ const Home = () => {
             )}
           </div>
         ) : newGroup ? (
-          <div className="relative">
+          <div className="relative overflow-y-scroll">
           <button className="absolute mr-3 cursor-pointer right-0" onClick={() => setNewGroup(false)}><FontAwesomeIcon icon={faTimes}/></button>
           <GroupList chats={chats} setChats={setChats} setNewGroup={setNewGroup} />
           </div>
