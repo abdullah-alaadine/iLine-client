@@ -109,7 +109,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
             className="absolute inset-0 z-10 overflow-y-auto w-full md:w-[60%] rounded-lg"
             style={{ height: "90%" }}
           >
-            <GroupMembersCard chat={chat} chats={chats} setChats={setChats} setGroupCard={setGroupCard} />
+            <GroupMembersCard chat={chat} setChat={setChat} chats={chats} setChats={setChats} setGroupCard={setGroupCard} />
           </div>}
         {showEmoji && (
           <div

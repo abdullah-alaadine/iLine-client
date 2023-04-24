@@ -3,7 +3,7 @@ import GroupIcon from "../assets/groupIcon.jpg";
 import GroupList from "./GroupList";
 import GroupDetails from "./GroupDetails";
 
-const GroupMembersCard = ({ chat, chats, setChats, setGroupCard }) => {
+const GroupMembersCard = ({ chat, chats, setChat, setChats, setGroupCard }) => {
   const { _id } = useSelector((state) => state.authReducer.user);
 
   return (
@@ -20,7 +20,7 @@ const GroupMembersCard = ({ chat, chats, setChats, setGroupCard }) => {
           setGroupCard={setGroupCard}
         />
       ) : (
-        <GroupDetails chat={chat}/>
+        <GroupDetails chats={chats} setChat={setChat} chat={chat} setChats={setChats}/>
       )}
     </div>
   );
