@@ -3,18 +3,15 @@ import allReducers from "./reducers";
 
 function saveToLocalStorage(store) {
   try {
-    if (localStorage.getItem("expirationDate")) {
+    if (localStorage.getItem("store")) {
       window.localStorage.setItem("store", JSON.stringify(store));
     } else {
       window.localStorage.setItem("store", JSON.stringify(store));
-      const expirationDate = 24 * 60 * 60 * 1000;
-      window.localStorage.setItem("expirationDate", expirationDate);
       setTimeout(() => {
-        localStorage.removeItem("expirationDate");
         localStorage.removeItem("store");
         alert("Session is expired! Please login again");
         location.reload();
-      }, expirationDate);
+      }, 1000 * 60 * 60 * 24);
     }
   } catch (e) {
     console.log(e);
