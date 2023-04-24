@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { createChat, updateChat } from "../api/chatsAPI";
@@ -29,7 +30,18 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
       );
       setNewGroup(false);
     } catch (error) {
-      console.log(error.response);
+      if (error.response) {
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     }
   };
   const onGroupMemberSearchResultClick = (newMember) => {
@@ -53,10 +65,21 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
       );
       setChats(chats.map((obj) => (data._id === obj._id ? { ...data } : obj)));
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     }
   };
-  
+
   const [search, setSearch] = useState(false);
   const handleSearchChange = async () => {
     if (searchRef.current.value) {
@@ -113,6 +136,18 @@ const GroupList = ({ chat, chats, setChats, setNewGroup }) => {
           </div>
         ))}
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <input
         type="text"
         ref={searchRef}
