@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import SignupForm from "./components/SignupForm";
-import LoginForm from "./components/LoginForm";
+import SignupForm from "./pages/Signup";
+import LoginForm from "./pages/Login";
 import { useSelector } from "react-redux";
 import Home from "./pages/Home";
 
