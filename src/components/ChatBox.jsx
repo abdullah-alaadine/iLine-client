@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Profile from "../assets/profileImg.webp";
+import GroupIcon from "../assets/groupIcon.jpg";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBolt } from "@fortawesome/free-solid-svg-icons";
@@ -83,7 +84,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         >
           {chat && (
             <img
-              src={profilePicture || Profile}
+              src={(chat.isGroup? chat.profilePic : chat.profilePicture) || (chat.isGroup ? GroupIcon : Profile)}
               className="w-8 h-8 md:w-10 md:h-10 rounded-full"
             />
           )}
