@@ -13,3 +13,11 @@ export const getUserChat = (arr, userObj) => {
     }
   }
 };
+
+export const memberExists = (arr, userObj) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i]._id === userObj._id) {
+        return userObj;
+    }
+  }
+};
