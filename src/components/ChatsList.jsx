@@ -73,7 +73,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
           />
           <p className="text-xs md:text-sm text-slate-200">{user.firstName}</p>
         </div>
-        {profileModal && <ProfileModal user={user}/>}
+        {profileModal && <ProfileModal setProfileModal={setProfileModal} user={user}/>}
         <img src={iLineLogo} className="w-2/3 h-32 object-cover" />
         <div className="search-box flex items-center mr-4 mb-1">
           <input
