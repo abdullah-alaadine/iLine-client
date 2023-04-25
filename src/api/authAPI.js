@@ -13,3 +13,9 @@ export const searchUsers = (data, token) =>
       ...data,
     },
   });
+export const updateProfile = (data, token) =>
+  authAPI.put("/", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
