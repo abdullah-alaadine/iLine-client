@@ -7,7 +7,7 @@ function saveToLocalStorage(store) {
       window.localStorage.setItem("store", JSON.stringify(store));
     } else {
       window.localStorage.setItem("store", JSON.stringify(store));
-      window.localStorage.setItem("expiryDate", new Date().getTime() + 5000);
+      window.localStorage.setItem("expiryDate", new Date().getTime() + 24 * 60 * 60 * 1000);
     }
   } catch (e) {
     console.log(e);
