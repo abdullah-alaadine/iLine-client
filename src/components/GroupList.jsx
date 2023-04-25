@@ -8,14 +8,24 @@ import { searchUsers } from "../api/authAPI";
 import GroupMemberSearchResult from "./GroupMemberSearchResult";
 import Pagination from "./Pagination";
 import { memberExists } from "../utils/checkUserExistence";
+import { uploadImage } from "../utils/uploadToFirebaseStorage";
 
-const GroupList = ({ chat, chats, setChats, setNewGroup, setGroupCard }) => {
+const GroupList = ({
+  chat,
+  chats,
+  setChats,
+  setNewGroup,
+  setGroupCard,
+  groupPicture,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { token } = useSelector((state) => state.authReducer);
   const [searchResults, setSearchResults] = useState([]);
-  const [name, setName] = useState(chat?.name ?? "")
   const [group, setGroup] = useState(chat?.members ?? []);
   const searchRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState(chat.name);
+
   const handleCreateGroupChat = async () => {
     try {
       const members = group.map((user) => user._id);
@@ -51,21 +61,28 @@ const GroupList = ({ chat, chats, setChats, setNewGroup, setGroupCard }) => {
     }
     searchRef.current.value = "";
   };
-
+  const { _id } = useSelector((state) => state.authReducer.user);
   const handleEditGroupChat = async () => {
     const members = group.map((user) => user._id);
+    let url;
+    setLoading(true);
     try {
+      if (groupPicture) {
+        url = await uploadImage(_id, groupPicture);
+      }
       const { data } = await updateChat(
         chat._id,
         {
-          name: name,
+          groupPicture: url,
+          name,
           members,
         },
         token
       );
       setChats(chats.map((obj) => (data._id === obj._id ? { ...data } : obj)));
-      setGroupCard(false)
-      toast('Group updated successfully!', {
+      setGroupCard(false);
+      setLoading(false);
+      toast("Group updated successfully!", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -74,9 +91,10 @@ const GroupList = ({ chat, chats, setChats, setNewGroup, setGroupCard }) => {
         draggable: true,
         progress: undefined,
         theme: "colored",
-        });
-        
+      });
     } catch (error) {
+      console.log(error);
+      setLoading(false);
       if (error.response) {
         toast.error(error.response.data.error, {
           position: "top-center",
@@ -127,7 +145,7 @@ const GroupList = ({ chat, chats, setChats, setNewGroup, setGroupCard }) => {
     <div className="flex flex-col gap-2 items-center overflow-y-scroll">
       <input
         value={name}
-        onChange={e => setName(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
         type="text"
         placeholder="Group Name"
         className="bg-slate-100 rounded-lg py-1 px-3 focus:outline-none focus:bg-slate-600 focus:text-slate-100"
@@ -194,7 +212,7 @@ const GroupList = ({ chat, chats, setChats, setNewGroup, setGroupCard }) => {
         }
         className=" bg-slate-700 w-fit py-1 px-2 rounded-lg text-slate-100 hover:bg-slate-100 hover:text-slate-700"
       >
-        {chat ? "Update Group" : "Create Group"}
+        {chat ? (loading ? "loading.." : "Update Group") : "Create Group"}
       </button>
     </div>
   );
