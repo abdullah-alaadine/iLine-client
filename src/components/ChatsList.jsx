@@ -10,6 +10,7 @@ import SearchResult from "../components/SearchResult";
 import Pagination from "../components/Pagination";
 import GroupList from "../components/GroupList";
 import Profile from "../assets/profileImg.webp";
+import ProfileModal from "./ProfileModal";
 
 const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
   const [newGroup, setNewGroup] = useState(false);
@@ -54,13 +55,17 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
   const { user } = useSelector((state) => state.authReducer);
   return (
     <div
+      onClick={() => setProfileModal(false)}
       style={chat && isMobile ? { display: "none" } : {}}
       className="h-screen bg-slate-400 w-full md:w-1/3 rounded-lg gap-2 flex flex-col"
     >
       <div className="flex relative flex-col items-center justify-between bg-slate-800 rounded ">
         <div
           className="cursor-pointer absolute top-0 left-0 p-1 rounded-lg mt-1 ml-1 w-20 bg-slate-500 justify-between flex items-center"
-          onClick={() => setProfileModal(true)}
+          onClick={e => {
+            e.stopPropagation()
+            setProfileModal(true)
+          }}
         >
           <img
             src={user.profilePicture ?? Profile}
@@ -68,6 +73,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
           />
           <p className="text-xs md:text-sm text-slate-200">{user.firstName}</p>
         </div>
+        {profileModal && <ProfileModal user={user}/>}
         <img src={iLineLogo} className="w-2/3 h-32 object-cover" />
         <div className="search-box flex items-center mr-4 mb-1">
           <input
