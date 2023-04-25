@@ -3,8 +3,14 @@ import ChatBox from "../components/ChatBox";
 import { getChats } from "../api/chatsAPI";
 import ChatsList from "../components/ChatsList";
 import { useSelector } from "react-redux";
+import { reloadIfTokenIsNoLongerValid } from "../utils/checkToken";
 
 const Home = () => {
+  useEffect(() => reloadIfTokenIsNoLongerValid(), []);
+  window.addEventListener("click", () => {
+    reloadIfTokenIsNoLongerValid();
+  });
+
   const [isMobile, setIsMobile] = useState(false);
   const [chat, setChat] = useState(null);
   const [chats, setChats] = useState(null);
