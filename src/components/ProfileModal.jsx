@@ -2,20 +2,46 @@ import Profile from "../assets/profileImg.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
-import {storage} from '../firebase';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useDispatch, useSelector } from "react-redux";
+import { updateSuccess } from "../actions/authActions";
+import { uploadImage } from "../utils/uploadToFirebaseStorage";
+import { updateProfile } from "../api/authAPI";
 
-const ProfileModal = ({ user }) => {
+const ProfileModal = ({ user, setProfileModal }) => {
   const [profileImage, setProfileImage] = useState(null);
   const imageRef = useRef(null);
-  const [fName, setFName] = useState("");
-  const [lName, setLName] = useState("");
+  const [firstName, setfirstName] = useState(user.firstName);
+  const [lastName, setlastName] = useState(user.lastName);
+  const [about, setAbout] = useState(user.about ?? "");
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.authReducer);
+  const { _id } = useSelector((state) => state.authReducer.user);
+  const [loading, setLoading] = useState(false);
+
   const setImageHandler = (e) => {
     if (e.target.files && e.target.files[0]) {
       const image = e.target.files[0];
       setProfileImage(image);
     }
   };
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    let url;
+    try {
+      if (profileImage) {
+        url = await uploadImage(_id, profileImage);
+      }
+      let userData = { firstName, lastName, about, profilePicture: url };
+      const { data } = await updateProfile(userData, token);
+      dispatch(updateSuccess(data));
+      setLoading(false);
+      setProfileModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       onClick={(e) => e.stopPropagation()}
@@ -50,22 +76,32 @@ const ProfileModal = ({ user }) => {
         <input
           type="text"
           className="w-full text-center focus:outline-none rounded-r-none rounded-md"
-          value={fName || user.firstName}
-          onChange={(e) => setFName(e.target.value)}
+          value={firstName}
+          placeholder="name"
+          onChange={(e) => setfirstName(e.target.value)}
         />
         <input
           type="text"
           className="w-full text-center focus:outline-none rounded-l-none rounded-md"
-          value={lName || user.lastName}
-          onChange={(e) => setLName(e.target.value)}
+          value={lastName}
+          placeholder="family"
+          onChange={(e) => setlastName(e.target.value)}
         />
       </div>
       <p className="text-xs sm:text-sm text-slate-800">{user.email}</p>
+      <textarea
+        value={about}
+        className="w-full text-center focus:outline-none rounded-md"
+        onChange={(e) => setAbout(e.target.value)}
+        placeholder="about"
+      />
+
       <button
-        className=" bg-slate-700 w-fit py-1 px-2 rounded-lg text-slate-100 hover:bg-slate-100 hover:text-slate-700"
-        onClick={() => {}}
+        className="disabled:hover:cursor-auto bg-slate-700 w-fit py-1 px-2 rounded-lg text-slate-100 hover:bg-slate-100 hover:text-slate-700"
+        onClick={handleUpdateProfile}
+        disabled={loading}
       >
-        update profile
+        {loading ? "loading.." : "update profile"}
       </button>
     </div>
   );
