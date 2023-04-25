@@ -7,11 +7,7 @@ function saveToLocalStorage(store) {
       window.localStorage.setItem("store", JSON.stringify(store));
     } else {
       window.localStorage.setItem("store", JSON.stringify(store));
-      setTimeout(() => {
-        localStorage.removeItem("store");
-        alert("Session is expired! Please login again");
-        location.reload();
-      }, 1000 * 60 * 60 * 24);
+      window.localStorage.setItem("expiryDate", new Date().getTime() + 5000);
     }
   } catch (e) {
     console.log(e);
