@@ -11,7 +11,7 @@ const Chat = ({ chat, setChat }) => {
       >
         <img
           className="w-10 sm:w-12 md:w-10  lg:w-12 rounded-full"
-          src={chat.members[0].profilePic ?? Profile}
+          src={chat.members[0].profilePicture ?? Profile}
           alt=""
         />
         <p className="text-xs md:text-sm text-center w-full self-center">
@@ -32,7 +32,7 @@ const Chat = ({ chat, setChat }) => {
       >
         <img
           className="w-10 sm:w-12 md:w-11 lg:w-12 rounded-full"
-          src={chat.profilePic ?? GroupIcon}
+          src={chat.groupPicture ?? GroupIcon}
           alt=""
         />
         <p className="text-xs md:text-sm text-center w-full self-center">{chat.name}</p>
