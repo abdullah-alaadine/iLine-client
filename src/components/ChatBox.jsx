@@ -84,8 +84,8 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         >
           {chat && (
             <img
-              src={(chat.isGroup? chat.groupPicture : chat.profilePicture) || (chat.isGroup ? GroupIcon : Profile)}
-              className="w-8 h-8 md:w-10 md:h-10 rounded-full"
+              src={(chat.isGroup? chat.groupPicture : chat.members[0].profilePicture) || (chat.isGroup ? GroupIcon : Profile)}
+              className="w-8 h-8 md:w-10 md:h-10 border-2 border-slate-800 rounded-full"
             />
           )}
 

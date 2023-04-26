@@ -10,7 +10,7 @@ const Chat = ({ chat, setChat }) => {
         className="flex gap-8 p-2 w-full items-center border-b border-slate-500 rounded-lg hover:bg-slate-500 hover:cursor-pointer"
       >
         <img
-          className="w-10 sm:w-12 md:w-10  lg:w-12 rounded-full"
+          className="w-10 sm:w-12 md:w-10 border-2 border-slate-800 lg:w-12 rounded-full"
           src={chat.members[0].profilePicture ?? Profile}
           alt=""
         />
@@ -31,7 +31,7 @@ const Chat = ({ chat, setChat }) => {
         className="flex gap-8 p-2 border-slate-500 items-center border-b rounded-lg hover:bg-slate-500 hover:cursor-pointer"
       >
         <img
-          className="w-10 sm:w-12 md:w-11 lg:w-12 rounded-full"
+          className="w-10 sm:w-12 md:w-11 lg:w-12 border-2 border-slate-800 rounded-full"
           src={chat.groupPicture ?? GroupIcon}
           alt=""
         />

@@ -40,7 +40,7 @@ const GroupMembersCard = ({ chat, chats, setChat, setChats, setGroupCard }) => {
               ? URL.createObjectURL(groupImage)
               : chat.groupPicture ?? GroupIcon
           }
-          className="w-40 rounded-full"
+          className="w-40 border-2 border-slate-800 rounded-full"
         />
       </div>
       {_id === chat.groupAdmin ? (

@@ -13,7 +13,7 @@ const GroupMemberSearchResult = ({ searchResult, onClickHandler, group }) => {
       }
     >
       <img
-        className="w-12 sm:w-14 md:w-15 rounded-full"
+        className="w-12 sm:w-14 border-2 border-slate-800 md:w-15 rounded-full"
         src={searchResult.profilePic ?? Profile}
         alt=""
       />

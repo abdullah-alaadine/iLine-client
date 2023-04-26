@@ -61,7 +61,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
     >
       <div className="flex relative flex-col items-center justify-between bg-slate-800 rounded ">
         <div
-          className="cursor-pointer absolute top-0 left-0 p-1 rounded-lg mt-1 ml-1 w-20 bg-slate-500 justify-between flex items-center"
+          className="cursor-pointer absolute top-0 left-0 p-1 gap-3 rounded-lg mt-1 ml-1 bg-slate-500 justify-between flex items-center"
           onClick={e => {
             e.stopPropagation()
             setProfileModal(true)

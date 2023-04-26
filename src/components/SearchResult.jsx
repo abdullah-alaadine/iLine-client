@@ -54,7 +54,7 @@ const SearchResult = ({
         className="flex gap-8 p-2 border-slate-500 items-center border-b rounded-lg hover:bg-slate-500 hover:cursor-pointer"
       >
         <img
-          className="w-12 sm:w-14 md:w-15 rounded-full"
+          className="w-12 sm:w-14 md:w-15 border-2 border-slate-800 rounded-full"
           src={groupSearchResult.profilePic ?? GroupIcon}
           alt=""
         />
@@ -78,7 +78,7 @@ const SearchResult = ({
         className="flex gap-8 p-2 items-center border-b border-slate-500 rounded-lg hover:bg-slate-500 hover:cursor-pointer"
       >
         <img
-          className="w-12 sm:w-14 md:w-15 rounded-full"
+          className="w-12 sm:w-14 md:w-15 border-2 border-slate-800 rounded-full"
           src={searchResult.profilePic ?? Profile}
           alt=""
         />

@@ -41,7 +41,7 @@ const GroupDetails = ({ chat, setChat, chats, setChats }) => {
             >
               <img
                 src={elem.profilePicture ?? Profile}
-                className="w-10 sm:w-12 md:w-10  lg:w-12 rounded-full"
+                className="w-10 sm:w-12 md:w-10 border-2 border-slate-800 lg:w-12 rounded-full"
               />
               <p className="">
                 {elem.firstName} {elem.lastName}
