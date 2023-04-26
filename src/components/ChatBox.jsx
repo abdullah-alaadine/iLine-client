@@ -12,6 +12,7 @@ import { getMessages, postMessage } from "../api/messagesAPI";
 import GroupMembersCard from "./GroupMembersCard";
 import OtherUserProfile from "./OtherUserProfile";
 import { socket } from "../utils/initializeSocketConnection";
+import { ToastContainer, toast } from "react-toastify";
 
 const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
   const [showEmoji, setShowEmoji] = useState(false);
@@ -42,16 +43,32 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
       }
     }
   });
-  socket.on("notification", (name) =>
-    alert(`you got a new message from ${name}`)
-  );
+  const [notification, setNotification] = useState(null);
+  useEffect(() => {
+    socket.on("notification", ({ name, chatId }) => {
+      toast.info(`you have a new message from ${name}`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setNotification(chatId);
+    });
+  }, []);
+
   const [otherUserProfile, setOtherUserProfile] = useState(false);
   const messageRef = useRef(null);
   const handleEmojiClick = (emojiObj) => {
     setShowEmoji(false);
     messageRef.current.value += emojiObj.emoji;
   };
-  const {firstName, lastName} = useSelector(state=>state.authReducer.user);
+  const { firstName, lastName } = useSelector(
+    (state) => state.authReducer.user
+  );
   const handleSubmit = async () => {
     try {
       const { data } = await postMessage(
@@ -61,7 +78,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
       );
       socket.emit("publishMessage", {
         chatId: chat._id,
-        name: chat.isGroup ? chat.name : firstName + ' ' + lastName,
+        name: chat.isGroup ? chat.name : firstName + " " + lastName,
       });
     } catch (error) {
       console.log(error);
@@ -91,6 +108,20 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
       }
       className="h-screen relative bg-slate-200 w-full md:w-2/3 rounded-lg overflow-y-scroll "
     >
+      <div onClick={chats? () => setChat(...chats.filter(elem => elem._id === notification)): null}>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      </div>
       <div className="relative border-slate-500 border-2 flex justify-between mx-2 items-center rounded-lg bg-slate-400 h-[10%]">
         {isMobile && (
           <button
