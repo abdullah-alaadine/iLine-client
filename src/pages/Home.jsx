@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ChatBox from "../components/ChatBox";
-import { getChats } from "../api/chatsAPI";
+import { getChat, getChats } from "../api/chatsAPI";
 import ChatsList from "../components/ChatsList";
 import { useSelector } from "react-redux";
 import { reloadIfTokenIsNoLongerValid } from "../utils/checkToken";
+import { socket } from "../utils/initializeSocketConnection";
 
 const Home = () => {
   useEffect(() => reloadIfTokenIsNoLongerValid(), []);
   window.addEventListener("click", () => {
     reloadIfTokenIsNoLongerValid();
   });
-
   const [isMobile, setIsMobile] = useState(false);
   const [chat, setChat] = useState(null);
   const [chats, setChats] = useState(null);
@@ -44,6 +44,18 @@ const Home = () => {
     }
     window.addEventListener("resize", handleResize);
   }, []);
+
+  socket.on("receiveMessage", async ({chatId}) => {
+    try {
+      setChats(
+        chats
+          ?.map((elem) => (elem._id === chatId ? {...elem, updatedAt: new Date().getTime(), lastMessage: new Date().getTime()} : elem))
+          ?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   return (
     <div className="flex gap-1">
