@@ -1,8 +1,15 @@
 import Profile from "../assets/profileImg.webp";
 import GroupIcon from "../assets/groupIcon.jpg";
 import { format } from "timeago.js";
+import { useEffect } from "react";
+import { socket } from "../utils/initializeSocketConnection";
 
 const Chat = ({ chat, setChat, thisChat }) => {
+  
+  useEffect(() => {
+    socket.emit("joinRoom", {chatId: chat._id});
+  }, [])
+
   if (!chat.isGroup) {
     return (
       <div
