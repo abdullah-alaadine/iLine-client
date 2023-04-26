@@ -5,7 +5,7 @@ import {format} from 'timeago.js'
 const Message = ({ message }) => {
   const { _id } = useSelector((state) => state.authReducer.user);
   return (
-    <div className="flex flex-col overflow-y-auto mx-3 ">
+    <div className="flex flex-col mx-3 ">
       <div
         className={
           "p-1 rounded-lg flex flex-col gap-2 max-w-[70%] text-xs md:text-sm lg:text-base " +

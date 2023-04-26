@@ -45,7 +45,7 @@ const Home = () => {
     window.addEventListener("resize", handleResize);
   }, []);
 
-  socket.on("receiveMessage", async ({chatId}) => {
+  socket.on("receiveMessage", async ({chatId, name}) => {
     try {
       setChats(
         chats

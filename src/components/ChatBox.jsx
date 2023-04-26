@@ -32,8 +32,8 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
     if (chat) fetchMessages();
   }, [chat]);
 
-  socket.on("receiveMessage", async ({chatId}) => {
-    if(chat?._id === chatId){
+  socket.on("receiveMessage", async ({ chatId, name }) => {
+    if (chat?._id === chatId) {
       try {
         const { data } = await getMessages(chat._id, token);
         setMessages(data);
@@ -41,14 +41,17 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         console.log(error);
       }
     }
-  })
+  });
+  socket.on("notification", (name) =>
+    alert(`you got a new message from ${name}`)
+  );
   const [otherUserProfile, setOtherUserProfile] = useState(false);
   const messageRef = useRef(null);
   const handleEmojiClick = (emojiObj) => {
     setShowEmoji(false);
     messageRef.current.value += emojiObj.emoji;
   };
-
+  const {firstName, lastName} = useSelector(state=>state.authReducer.user);
   const handleSubmit = async () => {
     try {
       const { data } = await postMessage(
@@ -56,7 +59,10 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         messageRef.current.value,
         token
       );
-      socket.emit("publishMessage", {chatId: chat._id})
+      socket.emit("publishMessage", {
+        chatId: chat._id,
+        name: chat.isGroup ? chat.name : firstName + ' ' + lastName,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +73,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
     if (e.keyCode === 13) {
       await handleSubmit();
     }
-  }
+  };
 
   return (
     <div
@@ -139,7 +145,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         </div>
       </div>
       <div className="relative border-solid py-1 overflow-y-hidden border-slate-500 bg-slate-400 grid grid-rows-1 rounded-xl border-2 m-2 h-5/6">
-      {otherUserProfile && (
+        {otherUserProfile && (
           <OtherUserProfile
             chat={chat}
             setOtherUserProfile={setOtherUserProfile}
@@ -179,29 +185,31 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
           )}
         </div>
         <div className="w-full bottom-0 flex justify-between items-center px-3 py-1">
-        {chat && <>
-          <FontAwesomeIcon
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowEmoji(true);
-            }}
-            icon={faSmile}
-            className="w-4 h-4 md:h-6 md:w-6 cursor-pointer"
-            color="black"
-          />
-          <input
-            ref={messageRef}
-            type="text"
-            onKeyDown={handleEnterSubmit}
-            placeholder="type here ..."
-            className="bg-slate-300 text-white w-10/12 p-2 rounded-lg focus:bg-slate-600 border-none outline-none placeholder-slate-600 ml-2 bottom-0"
-          />
-          <FontAwesomeIcon
-            icon={faPaperPlane}
-            onClick={handleSubmit}
-            className="w-4 h-4 md:h-6 md:w-6 cursor-pointer"
-          />
-          </>}
+          {chat && (
+            <>
+              <FontAwesomeIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowEmoji(true);
+                }}
+                icon={faSmile}
+                className="w-4 h-4 md:h-6 md:w-6 cursor-pointer"
+                color="black"
+              />
+              <input
+                ref={messageRef}
+                type="text"
+                onKeyDown={handleEnterSubmit}
+                placeholder="type here ..."
+                className="bg-slate-300 text-white w-10/12 p-2 rounded-lg focus:bg-slate-600 border-none outline-none placeholder-slate-600 ml-2 bottom-0"
+              />
+              <FontAwesomeIcon
+                icon={faPaperPlane}
+                onClick={handleSubmit}
+                className="w-4 h-4 md:h-6 md:w-6 cursor-pointer"
+              />
+            </>
+          )}
         </div>
       </div>
     </div>
