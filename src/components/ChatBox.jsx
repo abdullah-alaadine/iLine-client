@@ -51,6 +51,12 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
     messageRef.current.value = "";
   };
 
+  const handleEnterSubmit = async (e) => {
+    if (e.keyCode === 13) {
+      await handleSubmit();
+    }
+  }
+
   return (
     <div
       onClick={() => {
@@ -161,6 +167,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
           )}
         </div>
         <div className="w-full bottom-0 flex justify-between items-center px-3 py-1">
+        {chat && <>
           <FontAwesomeIcon
             onClick={(e) => {
               e.stopPropagation();
@@ -173,6 +180,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
           <input
             ref={messageRef}
             type="text"
+            onKeyDown={handleEnterSubmit}
             placeholder="type here ..."
             className="bg-slate-300 text-white w-10/12 p-2 rounded-lg focus:bg-slate-600 border-none outline-none placeholder-slate-600 ml-2 bottom-0"
           />
@@ -181,6 +189,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
             onClick={handleSubmit}
             className="w-4 h-4 md:h-6 md:w-6 cursor-pointer"
           />
+          </>}
         </div>
       </div>
     </div>
