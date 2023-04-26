@@ -11,6 +11,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { getMessages, postMessage } from "../api/messagesAPI";
 import GroupMembersCard from "./GroupMembersCard";
 import OtherUserProfile from "./OtherUserProfile";
+import { socket } from "../utils/initializeSocketConnection";
 
 const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
   const [showEmoji, setShowEmoji] = useState(false);
@@ -30,6 +31,17 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
     };
     if (chat) fetchMessages();
   }, [chat]);
+
+  socket.on("receiveMessage", async ({chatId}) => {
+    if(chat?._id === chatId){
+      try {
+        const { data } = await getMessages(chat._id, token);
+        setMessages(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  })
   const [otherUserProfile, setOtherUserProfile] = useState(false);
   const messageRef = useRef(null);
   const handleEmojiClick = (emojiObj) => {
@@ -44,7 +56,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         messageRef.current.value,
         token
       );
-      console.log(data);
+      socket.emit("publishMessage", {chatId: chat._id})
     } catch (error) {
       console.log(error);
     }
@@ -155,7 +167,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
             <EmojiPicker onEmojiClick={handleEmojiClick} />
           </div>
         )}
-        <div className=" overflow-x-hidden flex flex-col gap-1">
+        <div className=" overflow-y-scroll overflow-x-hidden flex flex-col gap-1">
           {messages.length ? (
             messages.map((message) => {
               return <Message message={message} key={message._id} />;
