@@ -22,3 +22,10 @@ export const updateChat = (chatId, data, token) =>
       Authorization: `Bearer ${token}`,
     },
   }); // data : {members: [id], name: String}
+
+export const getChat = (chatId, token) =>
+  chatAPI.get(`/${chatId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
