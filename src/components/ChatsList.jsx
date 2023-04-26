@@ -148,7 +148,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
       ) : (
         <div className="bg-slate-400 flex w-full flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
           {chats?.map((elem) => {
-            return <Chat setChat={setChat} key={elem._id} chat={elem} />;
+            return <Chat setChat={setChat} key={elem._id} chat={elem} thisChat={chat} />;
           })}
         </div>
       )}

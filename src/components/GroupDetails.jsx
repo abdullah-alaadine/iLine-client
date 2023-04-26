@@ -31,8 +31,9 @@ const GroupDetails = ({ chat, setChat, chats, setChats }) => {
 
   return (
     <div className="w-full flex flex-col items-center gap-2">
-      <p>{chat.name}</p>
-      <div className="w-full">
+      <p className="text-slate-200">{chat.name}</p>
+      <p className="text-xs md:text-sm self-start text-slate-200">group members</p>
+      <div className="w-full flex flex-col gap-1">
         {chat.members.map((elem) => {
           return (
             <div
@@ -43,7 +44,7 @@ const GroupDetails = ({ chat, setChat, chats, setChats }) => {
                 src={elem.profilePicture ?? Profile}
                 className="w-10 sm:w-12 md:w-10 border-2 border-slate-800 lg:w-12 rounded-full"
               />
-              <p className="">
+              <p className="text-slate-800">
                 {elem.firstName} {elem.lastName}
               </p>
               <FontAwesomeIcon
