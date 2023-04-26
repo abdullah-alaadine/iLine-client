@@ -63,7 +63,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
           ? { display: "none" }
           : {}
       }
-      className="h-screen relative` bg-slate-200 w-full md:w-2/3 rounded-lg overflow-y-scroll "
+      className="h-screen relative bg-slate-200 w-full md:w-2/3 rounded-lg overflow-y-scroll "
     >
       <div className=" border-slate-500 border-2 flex justify-between mx-2 items-center rounded-lg bg-slate-400 h-[10%]">
         {isMobile && (
@@ -119,7 +119,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
             <EmojiPicker onEmojiClick={handleEmojiClick} />
           </div>
         )}
-        <div className=" overflow-x-hidden">
+        <div className=" overflow-x-hidden flex flex-col gap-1">
           {messages.length ? (
             messages.map((message) => {
               return <Message message={message} key={message._id} />;
