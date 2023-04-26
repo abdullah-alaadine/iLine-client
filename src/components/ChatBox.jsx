@@ -10,6 +10,7 @@ import { faSmile } from "@fortawesome/free-solid-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { getMessages, postMessage } from "../api/messagesAPI";
 import GroupMembersCard from "./GroupMembersCard";
+import OtherUserProfile from "./OtherUserProfile";
 
 const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
   const [showEmoji, setShowEmoji] = useState(false);
@@ -17,6 +18,8 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
   const [messages, setMessages] = useState([]);
   const [groupCard, setGroupCard] = useState(false);
   useEffect(() => {
+    setOtherUserProfile(false);
+    setGroupCard(false);
     const fetchMessages = async () => {
       try {
         const { data } = await getMessages(chat._id, token);
@@ -27,15 +30,12 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
     };
     if (chat) fetchMessages();
   }, [chat]);
-
+  const [otherUserProfile, setOtherUserProfile] = useState(false);
   const messageRef = useRef(null);
   const handleEmojiClick = (emojiObj) => {
     setShowEmoji(false);
     messageRef.current.value += emojiObj.emoji;
   };
-  const { profilePicture, firstName, lastName } = useSelector(
-    (state) => state.authReducer.user
-  );
 
   const handleSubmit = async () => {
     try {
@@ -50,11 +50,13 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
     }
     messageRef.current.value = "";
   };
+
   return (
     <div
       onClick={() => {
         setShowEmoji(false);
         setGroupCard(false);
+        setOtherUserProfile(false);
       }}
       style={
         chat && isMobile
@@ -65,7 +67,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
       }
       className="h-screen relative bg-slate-200 w-full md:w-2/3 rounded-lg overflow-y-scroll "
     >
-      <div className=" border-slate-500 border-2 flex justify-between mx-2 items-center rounded-lg bg-slate-400 h-[10%]">
+      <div className="relative border-slate-500 border-2 flex justify-between mx-2 items-center rounded-lg bg-slate-400 h-[10%]">
         {isMobile && (
           <button
             onClick={() => setChat(null)}
@@ -76,15 +78,29 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         )}
 
         <div
-          className="mr-3 items-center rounded-lg flex gap-4 md:gap-8 p-2 border-slate-500 cursor-pointer hover:bg-slate-500"
-          onClick={e => {
-            e.stopPropagation()
-            setGroupCard(true)
-          }}
+          className="relative mr-3 items-center rounded-lg flex gap-4 md:gap-8 p-2 border-slate-500 cursor-pointer hover:bg-slate-500"
+          onClick={
+            chat
+              ? chat.isGroup
+                ? (e) => {
+                    e.stopPropagation();
+                    setGroupCard(true);
+                  }
+                : (e) => {
+                    e.stopPropagation();
+                    setOtherUserProfile(true);
+                  }
+              : null
+          }
         >
           {chat && (
             <img
-              src={(chat.isGroup? chat.groupPicture : chat.members[0].profilePicture) || (chat.isGroup ? GroupIcon : Profile)}
+              src={
+                (chat.isGroup
+                  ? chat.groupPicture
+                  : chat.members[0].profilePicture) ||
+                (chat.isGroup ? GroupIcon : Profile)
+              }
               className="w-8 h-8 md:w-10 md:h-10 border-2 border-slate-800 rounded-full"
             />
           )}
@@ -105,12 +121,26 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         </div>
       </div>
       <div className="relative border-solid py-1 overflow-y-hidden border-slate-500 bg-slate-400 grid grid-rows-1 rounded-xl border-2 m-2 h-5/6">
-        {groupCard && chat?.isGroup && <div
+      {otherUserProfile && (
+          <OtherUserProfile
+            chat={chat}
+            setOtherUserProfile={setOtherUserProfile}
+          />
+        )}
+        {groupCard && chat?.isGroup && (
+          <div
             className="absolute inset-0 z-10 overflow-y-auto w-full md:w-[60%] rounded-lg"
             style={{ height: "90%" }}
           >
-            <GroupMembersCard chat={chat} setChat={setChat} chats={chats} setChats={setChats} setGroupCard={setGroupCard} />
-          </div>}
+            <GroupMembersCard
+              chat={chat}
+              setChat={setChat}
+              chats={chats}
+              setChats={setChats}
+              setGroupCard={setGroupCard}
+            />
+          </div>
+        )}
         {showEmoji && (
           <div
             onClick={(e) => e.stopPropagation()}

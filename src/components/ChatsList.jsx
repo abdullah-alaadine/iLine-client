@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import iLineLogo from "../assets/iLine_logo-removebg-preview.png";
 import { groupChatExists } from "../utils/checkChatExistence";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import Chat from "../components/Chat";
 import { useSelector } from "react-redux";
 import { searchUsers } from "../api/authAPI";
@@ -78,12 +78,11 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
         <div className="search-box flex items-center mr-4 mb-1">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search Users"
             ref={searchRef}
             onChange={handleSearchChange}
-            className="p-2 rounded-lg placeholder:text-sm  focus:bg-slate-500 w-full bg-slate-700 bg-transparent border-none outline-none text-white placeholder-white ml-1"
+            className="p-2 rounded-lg placeholder:text-sm  focus:bg-slate-600 w-full bg-slate-500 border-none outline-none text-white placeholder-white ml-1"
           />
-          <FontAwesomeIcon icon={faSearch} className="text-white ml-2" />
         </div>
       </div>
       {!search && !newGroup && (
