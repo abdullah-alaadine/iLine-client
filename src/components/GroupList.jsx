@@ -24,7 +24,7 @@ const GroupList = ({
   const [group, setGroup] = useState(chat?.members ?? []);
   const searchRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState(chat.name);
+  const [name, setName] = useState(chat?.name ?? "");
 
   const handleCreateGroupChat = async () => {
     try {
@@ -65,10 +65,11 @@ const GroupList = ({
   const handleEditGroupChat = async () => {
     const members = group.map((user) => user._id);
     let url;
+    console.log(chat._id)
     setLoading(true);
     try {
       if (groupPicture) {
-        url = await uploadImage(_id, groupPicture);
+        url = await uploadImage(chat._id, groupPicture);
       }
       const { data } = await updateChat(
         chat._id,
