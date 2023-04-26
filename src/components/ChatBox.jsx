@@ -19,6 +19,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
   const { token } = useSelector((state) => state.authReducer);
   const [messages, setMessages] = useState([]);
   const [groupCard, setGroupCard] = useState(false);
+  const chatBoxRef = useRef(null);
   useEffect(() => {
     setOtherUserProfile(false);
     setGroupCard(false);
@@ -30,7 +31,9 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         console.log(error);
       }
     };
-    if (chat) fetchMessages();
+    if (chat) {
+      fetchMessages();
+    }
   }, [chat]);
 
   socket.on("receiveMessage", async ({ chatId, name }) => {
@@ -60,6 +63,10 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
     });
   }, []);
 
+  useEffect(() => {
+    chatBoxRef.current.scrollIntoView({ behavior: "smooth", scrollMode: "always" });
+  }, [messages])
+  
   const [otherUserProfile, setOtherUserProfile] = useState(false);
   const messageRef = useRef(null);
   const handleEmojiClick = (emojiObj) => {
@@ -108,7 +115,14 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
       }
       className="h-screen relative bg-slate-200 w-full md:w-2/3 rounded-lg overflow-y-scroll "
     >
-      <div onClick={chats? () => setChat(...chats.filter(elem => elem._id === notification)): null}>
+      <div
+        onClick={
+          chats
+            ? () =>
+                setChat(...chats.filter((elem) => elem._id === notification))
+            : null
+        }
+      >
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -214,6 +228,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
               your messages will go here
             </p>
           )}
+          <div ref={chatBoxRef}/>
         </div>
         <div className="w-full bottom-0 flex justify-between items-center px-3 py-1">
           {chat && (
