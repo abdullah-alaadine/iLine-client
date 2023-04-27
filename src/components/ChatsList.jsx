@@ -141,6 +141,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
           <GroupList
             chats={chats}
             setChats={setChats}
+            setChat={setChat}
             setNewGroup={setNewGroup}
           />
         </div>

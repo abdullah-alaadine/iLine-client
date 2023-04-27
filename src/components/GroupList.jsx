@@ -13,6 +13,7 @@ import { uploadImage } from "../utils/uploadToFirebaseStorage";
 const GroupList = ({
   chat,
   chats,
+  setChat,
   setChats,
   setNewGroup,
   setGroupCard,
@@ -38,6 +39,7 @@ const GroupList = ({
           (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
         )
       );
+      setChat(data);
       setNewGroup(false);
     } catch (error) {
       if (error.response) {
@@ -65,7 +67,7 @@ const GroupList = ({
   const handleEditGroupChat = async () => {
     const members = group.map((user) => user._id);
     let url;
-    console.log(chat._id)
+    console.log(chat._id);
     setLoading(true);
     try {
       if (groupPicture) {
