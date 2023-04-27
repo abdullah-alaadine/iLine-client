@@ -48,6 +48,7 @@ const GroupMembersCard = ({ chat, chats, setChat, setChats, setGroupCard }) => {
           groupPicture={groupImage}
           chat={chat}
           chats={chats}
+          setChat={setChat}
           setChats={setChats}
           setGroupCard={setGroupCard}
         />

@@ -55,7 +55,7 @@ const SearchResult = ({
       >
         <img
           className="w-12 sm:w-14 md:w-15 border-2 border-slate-800 rounded-full"
-          src={groupSearchResult.profilePic ?? GroupIcon}
+          src={groupSearchResult.groupPicture ?? GroupIcon}
           alt=""
         />
         <p className="text-base text-center w-full self-center">
@@ -79,7 +79,7 @@ const SearchResult = ({
       >
         <img
           className="w-12 sm:w-14 md:w-15 border-2 border-slate-800 rounded-full"
-          src={searchResult.profilePic ?? Profile}
+          src={searchResult.profilePicture ?? Profile}
           alt=""
         />
         <p className="text-base text-center w-full self-center">
