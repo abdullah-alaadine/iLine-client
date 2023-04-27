@@ -63,11 +63,11 @@ const GroupList = ({
     }
     searchRef.current.value = "";
   };
+
   const { _id } = useSelector((state) => state.authReducer.user);
   const handleEditGroupChat = async () => {
     const members = group.map((user) => user._id);
     let url;
-    console.log(chat._id);
     setLoading(true);
     try {
       if (groupPicture) {
@@ -82,7 +82,8 @@ const GroupList = ({
         },
         token
       );
-      setChats(chats.map((obj) => (data._id === obj._id ? { ...data } : obj)));
+      setChats(chats.map((elem) => (elem._id == data._id ? data : elem)));
+      setChat(data);
       setGroupCard(false);
       setLoading(false);
       toast("Group updated successfully!", {
