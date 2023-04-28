@@ -42,6 +42,7 @@ const SearchResult = ({
             (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
           )
         );
+        setChat(data);
       } catch (error) {
         console.log(error);
       }

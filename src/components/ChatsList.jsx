@@ -55,16 +55,19 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
   const { user } = useSelector((state) => state.authReducer);
   return (
     <div
-      onClick={() => setProfileModal(false)}
+      onClick={() => {
+        setProfileModal(false);
+        setDeleteOptionsModal(false);
+      }}
       style={chat && isMobile ? { display: "none" } : {}}
       className="h-screen bg-slate-400 w-full md:w-1/3 rounded-lg gap-2 flex flex-col"
     >
       <div className="flex relative flex-col items-center justify-between bg-slate-800 rounded ">
         <div
           className="cursor-pointer absolute top-0 left-0 p-1 gap-3 rounded-lg mt-1 ml-1 bg-slate-500 justify-between flex items-center"
-          onClick={e => {
-            e.stopPropagation()
-            setProfileModal(true)
+          onClick={(e) => {
+            e.stopPropagation();
+            setProfileModal(true);
           }}
         >
           <img
@@ -73,7 +76,9 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
           />
           <p className="text-xs md:text-sm text-slate-200">{user.firstName}</p>
         </div>
-        {profileModal && <ProfileModal setProfileModal={setProfileModal} user={user}/>}
+        {profileModal && (
+          <ProfileModal setProfileModal={setProfileModal} user={user} />
+        )}
         <img src={iLineLogo} className="w-2/3 h-32 object-cover" />
         <div className="search-box flex items-center mr-4 mb-1">
           <input
@@ -118,6 +123,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
               chats={chats}
               setChat={setChat}
               searchRef={searchRef}
+              groupChat={false}
             />
           ))}
           {searchResults?.totalPages > 1 ? (
@@ -148,7 +154,14 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
       ) : (
         <div className="bg-slate-400 flex w-full flex-col gap-1 p-2 overflow-y-scroll rounded-lg">
           {chats?.map((elem) => {
-            return <Chat setChat={setChat} key={elem._id} chat={elem} thisChat={chat} />;
+            return (
+              <Chat
+                setChat={setChat}
+                key={elem._id}
+                chat={elem}
+                thisChat={chat}
+              />
+            );
           })}
         </div>
       )}
