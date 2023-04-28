@@ -31,7 +31,7 @@ export const getChat = (chatId, token) =>
   });
 
 export const clearChat = (chatId, token) =>
-  chatAPI.delete(`/clear/:${chatId}`, {
+  chatAPI.delete(`/clear/${chatId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
