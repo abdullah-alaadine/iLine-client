@@ -52,7 +52,7 @@ const Home = () => {
   socket.on("fetchNewRooms", () => {
     setCounter(counter + 1);
   });
-  
+
   const handleResize = () => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
@@ -108,7 +108,7 @@ const Home = () => {
   });
 
   return (
-    <div className="flex gap-1">
+    <div className="flex">
       <ChatsList
         chat={chat}
         setChat={setChat}
