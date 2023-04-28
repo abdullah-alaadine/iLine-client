@@ -21,3 +21,11 @@ export const memberExists = (arr, userObj) => {
     }
   }
 };
+
+export const chatExists = (arr, chat) => {
+  for (let i = 0; i < arr?.length; i++) {
+    if (arr[i]._id === chat._id) {
+        return chat;
+    }
+  }
+};
