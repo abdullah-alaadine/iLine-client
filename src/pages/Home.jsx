@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ChatBox from "../components/ChatBox";
-import { getChats } from "../api/chatsAPI";
+import { getChat, getChats } from "../api/chatsAPI";
 import ChatsList from "../components/ChatsList";
 import { useSelector } from "react-redux";
 import { reloadIfTokenIsNoLongerValid } from "../utils/checkToken";
 import { socket } from "../utils/initializeSocketConnection";
 import { ToastContainer, toast } from "react-toastify";
+import { chatExists } from "../utils/checkUserExistence";
 
 const Home = () => {
   const { _id } = useSelector((state) => state.authReducer.user);
-
-  useEffect(() => {
-    reloadIfTokenIsNoLongerValid();
-    socket.emit("online", { userId: _id });
-  }, []);
 
   window.addEventListener("click", () => {
     reloadIfTokenIsNoLongerValid();
@@ -24,12 +20,14 @@ const Home = () => {
   const [chats, setChats] = useState(null);
   const { token } = useSelector((state) => state.authReducer);
   const [counter, setCounter] = useState(0);
+  const [clearedChats, setClearedChats] = useState([]);
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
         const { data } = await getChats(token);
-        setChats(data);
+        setChats(data.updatedChats);
+        setClearedChats(data.clearedChats);
       } catch (error) {
         console.log(error);
       }
@@ -41,7 +39,8 @@ const Home = () => {
     const fetchChats = async () => {
       try {
         const { data } = await getChats(token);
-        setChats(data);
+        setChats(data.updatedChats);
+        setClearedChats(data.clearedChats);
       } catch (error) {
         console.log(error);
       }
@@ -88,24 +87,43 @@ const Home = () => {
   }, []);
 
   socket.on("receiveMessage", async ({ chatId, name }) => {
-    try {
-      setChats(
-        chats
-          ?.map((elem) =>
-            elem._id === chatId
-              ? {
-                  ...elem,
-                  updatedAt: new Date().getTime(),
-                  lastMessage: new Date().getTime(),
-                }
-              : elem
+    const chatExist = chatExists(chats, { _id: chatId });
+    if (!chatExist) {
+      try {
+        const { data } = await getChat(chatId, token);
+        setChats(
+          [...chats, data].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           )
-          ?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-      );
-    } catch (error) {
-      console.log(error);
+        );
+      } catch (error) {}
+    } else {
+      try {
+        setChats(
+          chats
+            ?.map((elem) =>
+              elem._id === chatId
+                ? {
+                    ...elem,
+                    updatedAt: new Date().getTime(),
+                    lastMessage: new Date().getTime(),
+                  }
+                : elem
+            )
+            ?.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+        );
+      } catch (error) {}
     }
   });
+
+  useEffect(() => {
+    reloadIfTokenIsNoLongerValid();
+    socket.emit("online", { userId: _id });
+  }, []);
+
+  useEffect(() => {
+    clearedChats.forEach((elem) => socket.emit("joinRoom", { chatId: elem }));
+  }, [clearedChats]);
 
   return (
     <div className="flex">
