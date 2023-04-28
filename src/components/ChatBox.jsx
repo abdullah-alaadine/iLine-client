@@ -181,7 +181,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
           </div>
         )}
         <div className=" overflow-y-scroll overflow-x-hidden flex flex-col gap-1">
-          {messages.length ? (
+          {messages.length && chat ? (
             messages.map((message) => {
               return <Message message={message} key={message._id} />;
             })

@@ -57,7 +57,6 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
     <div
       onClick={() => {
         setProfileModal(false);
-        setDeleteOptionsModal(false);
       }}
       style={chat && isMobile ? { display: "none" } : {}}
       className="h-screen bg-slate-400 w-full md:w-1/3 rounded-lg gap-2 flex flex-col"
@@ -160,6 +159,8 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
                 key={elem._id}
                 chat={elem}
                 thisChat={chat}
+                setChats={setChats}
+                chats={chats}
               />
             );
           })}
