@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ChatBox from "../components/ChatBox";
-import { getChat, getChats } from "../api/chatsAPI";
+import { getChats } from "../api/chatsAPI";
 import ChatsList from "../components/ChatsList";
 import { useSelector } from "react-redux";
 import { reloadIfTokenIsNoLongerValid } from "../utils/checkToken";
@@ -8,14 +8,22 @@ import { socket } from "../utils/initializeSocketConnection";
 import { ToastContainer, toast } from "react-toastify";
 
 const Home = () => {
-  useEffect(() => reloadIfTokenIsNoLongerValid(), []);
+  const { _id } = useSelector((state) => state.authReducer.user);
+
+  useEffect(() => {
+    reloadIfTokenIsNoLongerValid();
+    socket.emit("online", { userId: _id });
+  }, []);
+
   window.addEventListener("click", () => {
     reloadIfTokenIsNoLongerValid();
   });
+
   const [isMobile, setIsMobile] = useState(false);
   const [chat, setChat] = useState(null);
   const [chats, setChats] = useState(null);
   const { token } = useSelector((state) => state.authReducer);
+  const [counter, setCounter] = useState(0);
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -29,6 +37,22 @@ const Home = () => {
     fetchChats();
   }, []);
 
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const { data } = await getChats(token);
+        setChats(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchChats();
+  }, [counter]);
+
+  socket.on("fetchNewRooms", () => {
+    setCounter(counter + 1);
+  });
+  
   const handleResize = () => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
@@ -100,18 +124,20 @@ const Home = () => {
             : null
         }
       >
-        {notification === chat?._id ? null: <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />}
+        {notification === chat?._id ? null : (
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+        )}
       </div>
       <ChatBox
         chat={chat}

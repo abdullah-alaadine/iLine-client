@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { format } from "timeago.js";
 import GroupIcon from "../assets/groupIcon.jpg";
 import { userExists, getUserChat } from "../utils/checkUserExistence";
+import { socket } from "../utils/initializeSocketConnection";
 
 const SearchResult = ({
   searchResult,
@@ -42,6 +43,7 @@ const SearchResult = ({
             (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
           )
         );
+        socket.emit("newRoom", { members: data.members.map(user => user._id) });
         setChat(data);
       } catch (error) {
         console.log(error);

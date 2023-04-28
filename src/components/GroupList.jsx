@@ -9,6 +9,7 @@ import GroupMemberSearchResult from "./GroupMemberSearchResult";
 import Pagination from "./Pagination";
 import { memberExists } from "../utils/checkUserExistence";
 import { uploadImage } from "../utils/uploadToFirebaseStorage";
+import { socket } from "../utils/initializeSocketConnection";
 
 const GroupList = ({
   chat,
@@ -39,6 +40,7 @@ const GroupList = ({
           (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
         )
       );
+      socket.emit("newRoom", { members: data.members.map((user) => user._id) });
       setChat(data);
       setNewGroup(false);
     } catch (error) {
