@@ -1,13 +1,22 @@
 import { useState } from "react";
+import { socket } from "../utils/initializeSocketConnection";
+import { useSelector } from "react-redux";
 
-function DeleteGroupModal({ onDeleteGroup, onCloseModal }) {
+function DeleteGroupModal({ onDeleteGroup, onCloseModal, chat }) {
   const [isDeleting, setIsDeleting] = useState(false);
-
+  const { firstName, lastName } = useSelector(
+    (state) => state.authReducer.user
+  );
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     await onDeleteGroup();
     setIsDeleting(false);
     onCloseModal();
+    socket.emit("deleteGroup", {
+      chatId: chat._id,
+      chatName: chat.name,
+      adminName: firstName + " " + lastName,
+    });
   };
 
   return (

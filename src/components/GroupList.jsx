@@ -90,6 +90,7 @@ const GroupList = ({
         },
         token
       );
+      socket.emit("updateGroup", { members, groupId: chat._id });
       setChats(chats.map((elem) => (elem._id == data._id ? data : elem)));
       setChat(data);
       setGroupCard(false);
@@ -169,6 +170,7 @@ const GroupList = ({
         <DeleteGroupModal
           onCloseModal={() => setDeleteGroupModal(false)}
           onDeleteGroup={handleDeleteGroup}
+          chat={chat}
         />
       )}
       <div className="flex flex-wrap">

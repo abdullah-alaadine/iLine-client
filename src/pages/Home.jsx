@@ -93,7 +93,7 @@ const Home = () => {
         const { data } = await getChat(chatId, token);
         setChats(
           [...chats, data].sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
           )
         );
       } catch (error) {}
@@ -119,7 +119,38 @@ const Home = () => {
   useEffect(() => {
     reloadIfTokenIsNoLongerValid();
     socket.emit("online", { userId: _id });
+    socket.on("groupDeleted", ({ adminName, chatName, chatId }) => {
+      toast.info(`${chatName} was deleted by ${adminName}`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setChats(chats?.filter((elem) => elem._id != chatId));
+      if (chat?._id == chatId) setChat(null);
+    });
   }, []);
+
+  useEffect(() => {
+    socket.on("groupUpdated", async ({ groupId }) => {
+      try {
+        const { data } = await getChat(groupId, token);
+        if (chats) {
+          setChats(
+            chats
+              .map((elem) => (elem._id == groupId ? data : elem))
+              .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  }, [chats]);
 
   useEffect(() => {
     clearedChats.forEach((elem) => socket.emit("joinRoom", { chatId: elem }));

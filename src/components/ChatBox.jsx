@@ -12,7 +12,6 @@ import { getMessages, postMessage } from "../api/messagesAPI";
 import GroupMembersCard from "./GroupMembersCard";
 import OtherUserProfile from "./OtherUserProfile";
 import { socket } from "../utils/initializeSocketConnection";
-import "./temp.css";
 
 const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
   const [showEmoji, setShowEmoji] = useState(false);
