@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const authAPI = axios.create({ baseURL: "http://localhost:4000/user" });
+const authAPI = axios.create({ baseURL: "https://iline-server.onrender.com/user" });
 
 export const logIn = (formData) => authAPI.post("/login", formData);
 export const signUp = (formData) => authAPI.post("/signup", formData);

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const messageAPI = axios.create({ baseURL: "http://localhost:4000/message" });
+const messageAPI = axios.create({ baseURL: "https://iline-server.onrender.com/message" });
 
 export const getMessages = (chatId, token) =>
   messageAPI.get(`/${chatId}`, {
