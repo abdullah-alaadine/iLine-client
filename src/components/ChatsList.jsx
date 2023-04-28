@@ -147,6 +147,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
             chats={chats}
             setChats={setChats}
             setChat={setChat}
+            newGroup={newGroup}
             setNewGroup={setNewGroup}
           />
         </div>
