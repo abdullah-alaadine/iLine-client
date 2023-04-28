@@ -29,3 +29,10 @@ export const getChat = (chatId, token) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+export const clearChat = (chatId, token) =>
+  chatAPI.delete(`/clear/:${chatId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
