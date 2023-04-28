@@ -43,3 +43,10 @@ export const leaveGroup = (chatId, token) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+export const deleteGroup = (chatId, token) =>
+  chatAPI.delete(`/${chatId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
