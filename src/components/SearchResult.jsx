@@ -43,11 +43,11 @@ const SearchResult = ({
             (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
           )
         );
-        socket.emit("newRoom", { members: data.members.map(user => user._id) });
+        socket.emit("newRoom", {
+          members: data.members.map((user) => user._id),
+        });
         setChat(data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
   };
   if (groupChat) {

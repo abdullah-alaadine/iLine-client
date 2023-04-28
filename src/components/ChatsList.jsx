@@ -30,9 +30,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
         token
       );
       setSearchResults(data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleSearchChange = async () => {
@@ -45,9 +43,7 @@ const ChatsList = ({ chat, isMobile, chats, setChat, setChats }) => {
           token
         );
         setSearchResults(data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     } else {
       setSearch(false);
     }

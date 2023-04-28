@@ -12,6 +12,7 @@ import { getMessages, postMessage } from "../api/messagesAPI";
 import GroupMembersCard from "./GroupMembersCard";
 import OtherUserProfile from "./OtherUserProfile";
 import { socket } from "../utils/initializeSocketConnection";
+import "./temp.css";
 
 const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
   const [showEmoji, setShowEmoji] = useState(false);
@@ -26,9 +27,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
       try {
         const { data } = await getMessages(chat._id, token);
         setMessages(data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     if (chat) {
       fetchMessages();
@@ -40,16 +39,17 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
       try {
         const { data } = await getMessages(chat._id, token);
         setMessages(data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
   });
 
   useEffect(() => {
-    chatBoxRef.current.scrollIntoView({ behavior: "smooth", scrollMode: "always" });
-  }, [messages])
-  
+    chatBoxRef.current.scrollIntoView({
+      behavior: "smooth",
+      scrollMode: "always",
+    });
+  }, [messages]);
+
   const [otherUserProfile, setOtherUserProfile] = useState(false);
   const messageRef = useRef(null);
   const handleEmojiClick = (emojiObj) => {
@@ -70,9 +70,7 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
         chatId: chat._id,
         name: chat.isGroup ? chat.name : firstName + " " + lastName,
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
     messageRef.current.value = "";
   };
 
@@ -177,7 +175,11 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
             onClick={(e) => e.stopPropagation()}
             className="absolute w-fit top-50"
           >
-            <EmojiPicker onEmojiClick={handleEmojiClick} />
+            <EmojiPicker
+              width={"270px"}
+              height={"340px"}
+              onEmojiClick={handleEmojiClick}
+            />
           </div>
         )}
         <div className=" overflow-y-scroll overflow-x-hidden flex flex-col gap-1">
@@ -186,11 +188,11 @@ const ChatBox = ({ chat, isMobile, setChat, chats, setChats }) => {
               return <Message message={message} key={message._id} />;
             })
           ) : (
-            <p className=" relative text-slate-100 left-[35%] top-[35%] text-lg">
+            <p className=" relative text-slate-100 mx-auto top-[35%] text-sm md:text-lg">
               your messages will go here
             </p>
           )}
-          <div ref={chatBoxRef}/>
+          <div ref={chatBoxRef} />
         </div>
         <div className="w-full bottom-0 flex justify-between items-center px-3 py-1">
           {chat && (

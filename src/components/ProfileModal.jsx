@@ -37,9 +37,7 @@ const ProfileModal = ({ user, setProfileModal }) => {
       dispatch(updateSuccess(data));
       setLoading(false);
       setProfileModal(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleLogout = () => {
@@ -50,7 +48,7 @@ const ProfileModal = ({ user, setProfileModal }) => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="absolute border-2 border-slate-300 bg-slate-500 rounded-lg w-[92%] md:w-[60%] gap-2 flex flex-col items-center p-2 mt-2"
+      className="absolute border-2 z-10 border-slate-300 bg-slate-500 rounded-lg w-[92%] md:w-[60%] gap-2 flex flex-col items-center p-2 mt-2"
     >
       <button
         onClick={handleLogout}

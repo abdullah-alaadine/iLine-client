@@ -6,33 +6,30 @@ import { useSelector } from "react-redux";
 import { createChat } from "../api/chatsAPI";
 
 const GroupDetails = ({ chat, setChat, chats, setChats }) => {
-  const {token} = useSelector(state => state.authReducer);
+  const { token } = useSelector((state) => state.authReducer);
   const messageGroupMemberHandler = async (_id) => {
     const prevChat = getUserChat(chats, { _id });
     if (prevChat) {
       setChat(prevChat);
     } else {
       try {
-        const { data } = await createChat(
-          { members: [_id] },
-          token
-        );
+        const { data } = await createChat({ members: [_id] }, token);
         setChat(data);
         setChats(
           [...chats, data].sort(
             (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
           )
         );
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
   };
 
   return (
     <div className="w-full flex flex-col items-center gap-2">
       <p className="text-slate-200">{chat.name}</p>
-      <p className="text-xs md:text-sm self-start text-slate-200">group members</p>
+      <p className="text-xs md:text-sm self-start text-slate-200">
+        group members
+      </p>
       <div className="w-full flex flex-col gap-1">
         {chat.members.map((elem) => {
           return (

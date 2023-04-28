@@ -30,8 +30,10 @@ const GroupList = ({
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState(chat?.name ?? "");
   const [deleteGroupModal, setDeleteGroupModal] = useState(false);
+  const [createLoading, setCreateLoading] = useState(false);
 
   const handleCreateGroupChat = async () => {
+    setCreateLoading(true);
     try {
       const members = group.map((user) => user._id);
       const { data } = await createChat(
@@ -60,11 +62,13 @@ const GroupList = ({
         });
       }
     }
+    setCreateLoading(false);
   };
   const onGroupMemberSearchResultClick = (newMember) => {
     if (!memberExists(group, newMember)) {
       setGroup([...group, newMember]);
       setSearch(false);
+      setSearchResults([]);
     }
     searchRef.current.value = "";
   };
@@ -101,7 +105,6 @@ const GroupList = ({
         theme: "colored",
       });
     } catch (error) {
-      console.log(error);
       setLoading(false);
       if (error.response) {
         toast.error(error.response.data.error, {
@@ -128,9 +131,7 @@ const GroupList = ({
           token
         );
         setSearchResults(data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     } else {
       setSearch(false);
     }
@@ -144,9 +145,7 @@ const GroupList = ({
         token
       );
       setSearchResults(data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleDeleteGroup = async () => {
@@ -167,7 +166,10 @@ const GroupList = ({
         className="bg-slate-100 text-sm md:text-base rounded-lg py-1 px-3 focus:outline-none focus:bg-slate-600 focus:text-slate-100"
       />
       {deleteGroupModal && (
-        <DeleteGroupModal onCloseModal={() => setDeleteGroupModal(false)} onDeleteGroup={handleDeleteGroup} />
+        <DeleteGroupModal
+          onCloseModal={() => setDeleteGroupModal(false)}
+          onDeleteGroup={handleDeleteGroup}
+        />
       )}
       <div className="flex flex-wrap">
         {group.map((member) => (
@@ -231,14 +233,22 @@ const GroupList = ({
         }
         className=" bg-slate-700 w-fit py-1 px-2 rounded-lg text-slate-100 text-sm md:text-base hover:bg-slate-100 hover:text-slate-700"
       >
-        {chat ? (loading ? "loading.." : "Update Group") : "Create Group"}
+        {chat
+          ? loading
+            ? "updating.."
+            : "Update Group"
+          : createLoading
+          ? "creating.."
+          : "Create Group"}
       </button>
-      {!newGroup && <button
-        className=" bg-slate-700 w-fit py-1 px-2 text-sm md:text-base rounded-lg text-slate-100 hover:bg-slate-100 hover:text-slate-700"
-        onClick={() => setDeleteGroupModal(true)}
-      >
-        Delete Group
-      </button>}
+      {!newGroup && (
+        <button
+          className=" bg-slate-700 w-fit py-1 px-2 text-sm md:text-base rounded-lg text-slate-100 hover:bg-slate-100 hover:text-slate-700"
+          onClick={() => setDeleteGroupModal(true)}
+        >
+          Delete Group
+        </button>
+      )}
     </div>
   );
 };
