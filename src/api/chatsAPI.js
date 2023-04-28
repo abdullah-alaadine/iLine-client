@@ -36,3 +36,10 @@ export const clearChat = (chatId, token) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+export const leaveGroup = (chatId, token) =>
+  chatAPI.put(`/leave/${chatId}`, null, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });

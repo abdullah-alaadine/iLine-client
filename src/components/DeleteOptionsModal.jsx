@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { clearChat } from "../api/chatsAPI";
+import { clearChat, leaveGroup } from "../api/chatsAPI";
 import { useSelector } from "react-redux";
 
 const DeleteOptionsModal = ({
@@ -11,6 +11,7 @@ const DeleteOptionsModal = ({
   setChat,
 }) => {
   const { token } = useSelector((state) => state.authReducer);
+  const { _id } = useSelector((state) => state.authReducer.user);
   const handleClearChat = async () => {
     try {
       const { data } = await clearChat(chat._id, token);
@@ -25,14 +26,25 @@ const DeleteOptionsModal = ({
     } catch (error) {}
   };
 
+  const handleLeaveGroup = async () => {
+    try {
+      const { data } = await leaveGroup(chat._id, token);
+      setChats(chats.filter((elem) => elem._id !== data._id));
+      setChat(null);
+    } catch (error) {}
+  };
+
   return (
     <div
       className="absolute flex justify-between p-2 rounded-lg right-[10%] z-10 text-slate-700 bg-slate-200"
       onClick={(e) => e.stopPropagation()}
     >
       <div>
-        {chat.isGroup && (
-          <div className="border-b border-slate-800 hover:bg-slate-600 p-2 hover:text-slate-200">
+        {chat.isGroup && _id != chat.groupAdmin && (
+          <div
+            onClick={handleLeaveGroup}
+            className="border-b border-slate-800 hover:bg-slate-600 p-2 hover:text-slate-200"
+          >
             leave group
           </div>
         )}
