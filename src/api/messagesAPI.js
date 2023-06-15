@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const messageAPI = axios.create({ baseURL: "https://iline-server.onrender.com/message" });
+const messageAPI = axios.create({ baseURL: import.meta.env.VITE_SERVER_URL + "/message" });
 
 export const getMessages = (chatId, token) =>
   messageAPI.get(`/${chatId}`, {
