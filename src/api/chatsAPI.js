@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const chatAPI = axios.create({ baseURL: "https://iline-server.onrender.com/chat" });
+const chatAPI = axios.create({ baseURL: import.meta.env.VITE_SERVER_URL + "/chat" });
 
 export const getChats = (token) =>
   chatAPI.get("", {
